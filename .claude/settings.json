@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv:*)",
+      "Bash(ruff:*)",
+      "Bash(pytest:*)",
+      "Bash(git:*)",
+      "Bash(npm:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "bash -c 'case \"$FILE_PATH\" in *.py) ruff format \"$FILE_PATH\";; esac'" }
+        ]
+      }
+    ]
+  }
+}
