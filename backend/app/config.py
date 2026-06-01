@@ -38,15 +38,42 @@ GEMINI_REASONING_MODEL: str = os.getenv("GEMINI_REASONING_MODEL", "gemini-2.5-fl
 GEMINI_EXTRACTION_MODEL: str = os.getenv("GEMINI_EXTRACTION_MODEL", "gemini-2.5-flash-lite")
 
 # --------------------------------------------------------------------------------------
+# Canonical dict keys — single source of truth so config and code can never drift.
+# SUBSCORE_* keys double as SCORING_WEIGHTS keys AND ScoredComp.subscores keys; CF_* keys name
+# the metrics in Valuation.confidence_factors; CT_* keys key CONFIDENCE_THRESHOLDS. Code imports
+# these constants instead of re-typing the metric-name strings.
+# --------------------------------------------------------------------------------------
+SUBSCORE_DISTANCE = "distance"
+SUBSCORE_LIVING_AREA = "living_area"
+SUBSCORE_RECENCY = "recency"
+SUBSCORE_GRADE_CONDITION = "grade_condition"
+SUBSCORE_AGE = "age"
+SUBSCORE_BED_BATH = "bed_bath"
+
+CF_COMP_COUNT = "comp_count"
+CF_MEAN_DISTANCE_KM = "mean_distance_km"
+CF_DISPERSION = "dispersion"
+CF_MEDIAN_AGE_DAYS = "median_age_days"
+
+CT_MIN_COMPS = "min_comps"
+CT_MAX_MEAN_DISTANCE_KM = "max_mean_distance_km"
+CT_MAX_DISPERSION = "max_dispersion"
+CT_MAX_MEDIAN_AGE_DAYS = "max_median_age_days"
+
+# Internal unit convention: recency/age are handled in DAYS throughout the core; only the
+# conservative staleness term converts DAYS → YEARS (at that edge) using DAYS_PER_YEAR.
+DAYS_PER_YEAR: float = 365.25
+
+# --------------------------------------------------------------------------------------
 # Scoring weights (§6) — weighted sum of normalized 0–1 subscores. Must sum to 1.0.
 # --------------------------------------------------------------------------------------
 SCORING_WEIGHTS: dict[str, float] = {
-    "distance": 0.30,
-    "living_area": 0.20,
-    "recency": 0.15,
-    "grade_condition": 0.15,
-    "age": 0.10,
-    "bed_bath": 0.10,
+    SUBSCORE_DISTANCE: 0.30,
+    SUBSCORE_LIVING_AREA: 0.20,
+    SUBSCORE_RECENCY: 0.15,
+    SUBSCORE_GRADE_CONDITION: 0.15,
+    SUBSCORE_AGE: 0.10,
+    SUBSCORE_BED_BATH: 0.10,
 }
 assert abs(sum(SCORING_WEIGHTS.values()) - 1.0) < 1e-9, "SCORING_WEIGHTS must sum to 1.0"
 
@@ -57,6 +84,19 @@ assert abs(sum(SCORING_WEIGHTS.values()) - 1.0) < 1e-9, "SCORING_WEIGHTS must su
 RETRIEVAL_TIERS: list[tuple[float, int]] = [(2.0, 180), (5.0, 365), (10.0, 540)]
 TARGET_COMPS_MIN: int = 10
 TARGET_COMPS_MAX: int = 20
+
+# Subscore normalization scales — each subscore decays to 0 at its scale. Distance/recency
+# reuse the widest retrieval tier so a candidate at the search boundary contributes ~0.
+SUBSCORE_SCALES: dict[str, float] = {
+    "distance_km": RETRIEVAL_TIERS[-1][0],  # widest radius (km)
+    "recency_days": float(RETRIEVAL_TIERS[-1][1]),  # widest time window (days)
+    "living_area_frac": 0.50,  # |Δsqft| / subject_sqft at which area similarity hits 0
+    "grade": 4.0,  # KC grade points
+    "condition": 4.0,  # condition 1–5 → max spread 4
+    "age_years": 30.0,  # |Δyear_built| in years
+    "beds": 2.0,
+    "baths": 2.0,
+}
 
 # --------------------------------------------------------------------------------------
 # Outlier flagging (§6) — Sam's #1 ask. Robust $/sqft band on the candidate set.
@@ -79,7 +119,7 @@ TIME_INDEX_FREQ: str = "M"  # monthly $/sqft index for the time adjustment
 CONSERVATIVE_BASE_MARGIN: float = 0.02
 CONSERVATIVE_DISPERSION_COEF: float = 0.50  # × coefficient-of-variation of adjusted prices
 CONSERVATIVE_DISTANCE_COEF: float = 0.01  # × mean comp distance (km)
-CONSERVATIVE_STALENESS_COEF: float = 0.02  # × mean comp age (years before as_of_date)
+CONSERVATIVE_STALENESS_COEF: float = 0.02  # × mean comp age in YEARS (days / DAYS_PER_YEAR at edge)
 CONSERVATIVE_MARGIN_CAP: float = 0.15  # never discount the point estimate by more than 15%
 
 # --------------------------------------------------------------------------------------
@@ -88,15 +128,15 @@ CONSERVATIVE_MARGIN_CAP: float = 0.15  # never discount the point estimate by mo
 # --------------------------------------------------------------------------------------
 CONFIDENCE_THRESHOLDS: dict[str, dict[str, float]] = {
     "High": {
-        "min_comps": 8,
-        "max_mean_distance_km": 3.0,
-        "max_dispersion": 0.12,
-        "max_median_age_days": 180,
+        CT_MIN_COMPS: 8,
+        CT_MAX_MEAN_DISTANCE_KM: 3.0,
+        CT_MAX_DISPERSION: 0.12,
+        CT_MAX_MEDIAN_AGE_DAYS: 180,
     },
     "Medium": {
-        "min_comps": 5,
-        "max_mean_distance_km": 6.0,
-        "max_dispersion": 0.20,
-        "max_median_age_days": 365,
+        CT_MIN_COMPS: 5,
+        CT_MAX_MEAN_DISTANCE_KM: 6.0,
+        CT_MAX_DISPERSION: 0.20,
+        CT_MAX_MEDIAN_AGE_DAYS: 365,
     },
 }
