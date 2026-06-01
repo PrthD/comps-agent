@@ -109,7 +109,23 @@ OUTLIER_IQR_MULT: float = 1.5
 # Hedonic adjustment + time index (§6)
 # --------------------------------------------------------------------------------------
 HEDONIC_FEATURES: list[str] = ["sqft_living", "beds", "baths", "grade", "age"]
+# Log-transform these features → elasticities (scale-free), so raw size scales don't swamp the
+# small-integer features (grade/beds). log(price) ~ log(sqft_living) gives a $/sqft elasticity.
+HEDONIC_LOG_FEATURES: list[str] = ["sqft_living"]
 HEDONIC_USE_ZIP: bool = True  # add zip dummies to the log(price) regression
+# Expected economic sign of each feature's effect on price. Adjustment coefficients are clamped to
+# this half-line so we never apply a backwards adjustment (e.g. paying MORE for FEWER beds); a
+# wrong-signed coefficient is clamped to 0 (no adjustment) and surfaced — never applied silently.
+HEDONIC_EXPECTED_SIGN: dict[str, int] = {
+    "sqft_living": 1,
+    "beds": 1,
+    "baths": 1,
+    "grade": 1,
+    "age": -1,  # older → not more valuable, all else equal
+}
+HEDONIC_CLAMP_SIGNS: bool = True
+# Sanity band for the model's implied marginal $/sqft, asserted before trusting the backtest.
+HEDONIC_IMPLIED_PPSF_RANGE: tuple[float, float] = (150.0, 400.0)
 TIME_INDEX_FREQ: str = "M"  # monthly $/sqft index for the time adjustment
 
 # --------------------------------------------------------------------------------------

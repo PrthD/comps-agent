@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from app import config
-from app.core.data import derive_property_type, types_compatible
+from app.core.data import ATTACHED_TYPES, derive_property_type
 from app.schemas import Comp, Subject
 
 EARTH_RADIUS_KM = 6371.0088
@@ -59,7 +59,11 @@ def search_comps(subject: Subject, store: pd.DataFrame) -> list[Comp]:
 
     # Leakage guard FIRST, then compatible property type.
     mask_leak = sale_dates < as_of
-    mask_type = store["property_type"].map(lambda t: types_compatible(t, subject_type))
+    types = store["property_type"]
+    if subject_type in ATTACHED_TYPES:
+        mask_type = types.isin(list(ATTACHED_TYPES))
+    else:
+        mask_type = types == subject_type
     base = store[mask_leak & mask_type].copy()
     if base.empty:
         return []

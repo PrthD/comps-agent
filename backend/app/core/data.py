@@ -21,7 +21,7 @@ from app.config import DATA_PATH
 DETACHED = "detached"
 TOWNHOUSE = "townhouse"
 CONDO = "condo"
-_ATTACHED = frozenset({TOWNHOUSE, CONDO})
+ATTACHED_TYPES = frozenset({TOWNHOUSE, CONDO})
 
 
 def derive_property_type(grade: int | None, floors: float | None = None) -> str:
@@ -42,12 +42,13 @@ def derive_property_type(grade: int | None, floors: float | None = None) -> str:
 
 def types_compatible(a: str, b: str) -> bool:
     """True if two types are comparable: exact match, or both attached (townhouse/condo)."""
-    return a == b or (a in _ATTACHED and b in _ATTACHED)
+    return a == b or (a in ATTACHED_TYPES and b in ATTACHED_TYPES)
 
 
 def load_comps(path: Path = DATA_PATH) -> pd.DataFrame:
     """Load the comps store from the bundled parquet via DuckDB, deriving property_type."""
     df = duckdb.read_parquet(str(path)).df()
+    df["sale_date"] = pd.to_datetime(df["sale_date"])  # normalize once (cheap leakage filtering)
     df["property_type"] = [
         derive_property_type(g, f) for g, f in zip(df["grade"], df["floors"], strict=False)
     ]
