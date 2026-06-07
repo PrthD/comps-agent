@@ -39,6 +39,35 @@ class Subject(PropertyFeatures):
     needs_review: list[str] | None = None
 
 
+# Fields the deterministic math actually needs to value a subject. year_built/grade/condition are
+# intentionally absent — the core treats them as nullable (neutral subscores, no adjustment).
+REQUIRED_FIELDS: tuple[str, ...] = ("sqft_living", "beds", "baths", "lat", "lng")
+
+
+def required_fields_missing(subject: Subject) -> list[str]:
+    """Single source of truth for the gate: which required fields are absent or sentinel.
+
+    Detects the placeholders the extract path emits when it cannot read a field (it never fabricates
+    a value — it flags one): ``sqft_living == 1``, ``lat == lng == 0.0`` (the coordinate
+    placeholder), and ``beds``/``baths == 0.0``. Anything still in ``subject.needs_review`` that the
+    math needs also counts. Returned sorted + de-duplicated; empty list means "ready to value".
+    """
+    missing: set[str] = set()
+    if subject.sqft_living <= 1:  # 1 is the extractor's placeholder; no real home is ≤1 sqft
+        missing.add("sqft_living")
+    if not subject.beds:  # 0.0 placeholder (or genuinely 0 → still not valuable for the math)
+        missing.add("beds")
+    if not subject.baths:
+        missing.add("baths")
+    if subject.lat == 0.0 and subject.lng == 0.0:  # the coordinate placeholder (never invented)
+        missing.add("lat")
+        missing.add("lng")
+    for field in subject.needs_review or []:
+        if field in REQUIRED_FIELDS:
+            missing.add(field)
+    return sorted(missing)
+
+
 class Comp(PropertyFeatures):
     """A real comparable sale row retrieved from the comps store."""
 

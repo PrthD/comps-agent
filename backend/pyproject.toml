@@ -12,12 +12,14 @@ dependencies = [
     "scikit-learn",
     "google-genai",
     "python-dotenv",
+    "python-multipart",
 ]
 
 [dependency-groups]
 dev = [
     "ruff",
     "pytest",
+    "httpx",
 ]
 
 [build-system]
@@ -33,6 +35,10 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+# FastAPI's File()/Form()/Depends()/Query() in argument defaults are idiomatic, not B008 bugs.
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.File", "fastapi.Form", "fastapi.Depends", "fastapi.Query"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

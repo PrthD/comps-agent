@@ -32,6 +32,9 @@ _STORE: pd.DataFrame | None = None
 _HEDONIC: HedonicModel | None = None
 
 
+_CONFIDENCE_RANK = {"Low": 0, "Medium": 1, "High": 2}
+
+
 def init() -> tuple[pd.DataFrame, HedonicModel]:
     """Load the comps store and fit the hedonic model once; cache for the process lifetime."""
     global _STORE, _HEDONIC
@@ -39,6 +42,11 @@ def init() -> tuple[pd.DataFrame, HedonicModel]:
         store = load_comps()
         _STORE, _HEDONIC = store, fit_hedonic(store)
     return _STORE, _HEDONIC
+
+
+def store_size() -> int:
+    """Number of comps currently loaded (0 if ``init`` has not run) — for the health endpoint."""
+    return 0 if _STORE is None else int(len(_STORE))
 
 
 def value_deterministic(subject: Subject, store: pd.DataFrame, hedonic: HedonicModel) -> Valuation:
@@ -91,6 +99,25 @@ def _widened_candidates(subject: Subject, store: pd.DataFrame) -> list:
     return [_row_to_comp(rec) for rec in chosen.to_dict("records")]
 
 
+def _adopt_widened(current: Valuation, widened: Valuation) -> bool:
+    """Adopt the widened (type-relaxed) result only if it improves coverage WITHOUT worse comps.
+
+    Gates on confidence, not just raw count: the widened set must reach the comp floor AND be no
+    less confident than the current one, and must genuinely improve on it (more comps OR higher
+    confidence). This keeps it inert on King County (same single-type set → no improvement) and,
+    elsewhere, stops us trading good comps for more-but-worse ones.
+    """
+    widened_n = _usable_count(widened)
+    if widened_n < config.TARGET_COMPS_MIN:
+        return False
+    if _CONFIDENCE_RANK[widened.confidence] < _CONFIDENCE_RANK[current.confidence]:
+        return False
+    return (
+        widened_n > _usable_count(current)
+        or _CONFIDENCE_RANK[widened.confidence] > _CONFIDENCE_RANK[current.confidence]
+    )
+
+
 def _requery(subject: Subject, store: pd.DataFrame, hedonic: HedonicModel) -> Valuation | None:
     """One bounded widening pass: relax type, re-score/flag/estimate. ``None`` if nothing new."""
     candidates = _widened_candidates(subject, store)
@@ -120,10 +147,10 @@ def run_valuation(
 
     valuation = value_deterministic(subject, store, hedonic)
 
-    # Bounded deterministic re-query: widen ONCE, adopt only if it found strictly more usable comps.
+    # Bounded deterministic re-query: widen ONCE, adopt only if it improves comparability.
     if _should_requery(valuation):
         widened = _requery(subject, store, hedonic)
-        if widened is not None and _usable_count(widened) > _usable_count(valuation):
+        if widened is not None and _adopt_widened(valuation, widened):
             valuation = widened
 
     # Reasoning: the single LLM call. Any failure (no key, 429, empty) → deterministic fallback.

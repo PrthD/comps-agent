@@ -14,6 +14,29 @@ from app import config
 from app.agent import orchestrator as orch
 from app.agent.extract import _ExtractedSubject, extract_subject
 from app.agent.reason import reason_over_valuation
+from app.schemas import ScoredComp, Valuation
+
+
+def _valuation_with(n_comps, confidence, make_comp) -> Valuation:
+    """Build a Valuation carrying ``n_comps`` non-flagged comps at a given confidence level."""
+    comps = [
+        ScoredComp(
+            comp=make_comp(), similarity=0.9, subscores={}, adjustments={}, adjusted_price=500000
+        )
+        for _ in range(n_comps)
+    ]
+    return Valuation(
+        conservative_value=480000,
+        point_estimate=500000,
+        range_low=470000,
+        range_high=520000,
+        confidence=confidence,
+        confidence_factors={},
+        comps=comps,
+        rationale="",
+        mode="deterministic",
+        elapsed_ms=0,
+    )
 
 
 def _patch_genai_client(monkeypatch, response):
@@ -184,3 +207,27 @@ def test_value_document_uses_at_most_two_llm_calls(
     assert got.mode == "agent"
     assert got.rationale == "DOC RATIONALE"
     assert got.point_estimate == expected.point_estimate  # core number, not the LLM
+
+
+def test_adopt_widened_gates_on_confidence(make_comp):
+    """Adopted only above the comp floor AND with confidence no worse, and only if improving."""
+    current = _valuation_with(9, "Medium", make_comp)  # thin → would trigger the re-query
+    assert orch._adopt_widened(current, _valuation_with(15, "Low", make_comp)) is False  # worse
+    assert orch._adopt_widened(current, _valuation_with(6, "High", make_comp)) is False  # < floor
+    assert orch._adopt_widened(current, _valuation_with(9, "Medium", make_comp)) is False  # no gain
+    assert orch._adopt_widened(current, _valuation_with(15, "High", make_comp)) is True  # adopt
+
+
+def test_run_valuation_does_not_adopt_lower_confidence(
+    monkeypatch, make_subject, make_comp, synthetic_store, hedonic_model
+):
+    """End-to-end: a widened result with more comps but lower confidence is NOT adopted."""
+    monkeypatch.setattr(config, "MODEL_AVAILABLE", False)
+    current = _valuation_with(9, "Medium", make_comp)  # 9 < TARGET_COMPS_MIN → re-query fires
+    widened = _valuation_with(15, "Low", make_comp)  # tempting count, worse comparability
+    monkeypatch.setattr(orch, "value_deterministic", lambda *a, **k: current)
+    monkeypatch.setattr(orch, "_requery", lambda *a, **k: widened)
+
+    got = orch.run_valuation(make_subject(), store=synthetic_store, hedonic=hedonic_model)
+
+    assert got.confidence == "Medium" and len(got.comps) == 9  # kept the better original
