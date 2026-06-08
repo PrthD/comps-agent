@@ -1,6 +1,6 @@
 // Pure display helpers. No business logic; every number shown comes from the API as-is.
 
-import type { CompStatus } from '../api'
+import type { CompStatus, Subject } from '../api'
 
 export function formatCurrency(value: number): string {
   return new Intl.NumberFormat('en-US', {
@@ -33,6 +33,20 @@ const FIELD_LABELS: Record<string, string> = {
 
 export function fieldLabel(key: string): string {
   return FIELD_LABELS[key] ?? key
+}
+
+// One tight descriptor line for the subject property (nulls omitted). Display-only, "·" separated.
+export function subjectSummary(s: Subject): string {
+  const parts: string[] = []
+  if (s.property_type) parts.push(s.property_type.charAt(0).toUpperCase() + s.property_type.slice(1))
+  if (s.beds != null && s.baths != null) parts.push(`${s.beds} bd / ${s.baths} ba`)
+  else if (s.beds != null) parts.push(`${s.beds} bd`)
+  else if (s.baths != null) parts.push(`${s.baths} ba`)
+  if (s.sqft_living != null) parts.push(`${s.sqft_living.toLocaleString()} sqft`)
+  if (s.year_built != null) parts.push(`built ${s.year_built}`)
+  if (s.grade != null) parts.push(`grade ${s.grade}`)
+  if (s.condition != null) parts.push(`condition ${s.condition}`)
+  return parts.join(' · ')
 }
 
 const FACTOR_LABELS: Record<string, string> = {

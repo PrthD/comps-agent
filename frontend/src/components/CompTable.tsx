@@ -38,15 +38,21 @@ export default function CompTable({ rows }: { rows: Row[] }) {
     }
   }
 
-  const SortHeader = ({ col, label }: { col: SortKey; label: string }) => (
+  const SortHeader = ({ col, label, title }: { col: SortKey; label: string; title?: string }) => (
     <th
       onClick={() => toggle(col)}
+      title={title}
       className="cursor-pointer select-none px-3 py-1.5 text-right font-medium hover:text-neutral-900"
     >
       {label}
       <span className="text-neutral-400">{sortKey === col ? (dir === 'asc' ? ' ↑' : ' ↓') : ''}</span>
     </th>
   )
+
+  // Weights mirror the backend SCORING_WEIGHTS; surfaced on hover so the Sim score is auditable.
+  const SIM_TITLE =
+    'Weighted similarity: distance 30%, living area 20%, recency 15%, ' +
+    'grade/condition 15%, age 10%, bed/bath 10%'
 
   return (
     <div className="overflow-x-auto rounded border border-neutral-200">
@@ -59,7 +65,7 @@ export default function CompTable({ rows }: { rows: Row[] }) {
             <SortHeader col="distance_km" label="Dist" />
             <SortHeader col="sqft_living" label="Sqft" />
             <th className="px-3 py-1.5 text-right font-medium">Bd/Ba</th>
-            <SortHeader col="similarity" label="Sim" />
+            <SortHeader col="similarity" label="Sim" title={SIM_TITLE} />
             <th className="px-3 py-1.5 text-left font-medium">Status</th>
           </tr>
         </thead>

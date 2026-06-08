@@ -1,7 +1,13 @@
 import { useMemo, type ReactNode } from 'react'
 
 import type { Subject, Valuation } from '../api'
-import { factorLabel, formatCurrency, formatDuration, formatFactor } from '../lib/format'
+import {
+  factorLabel,
+  formatCurrency,
+  formatDuration,
+  formatFactor,
+  subjectSummary,
+} from '../lib/format'
 import { ConfidenceBadge, ModeBadge } from './Badges'
 import CompMap from './CompMap'
 import CompTable from './CompTable'
@@ -136,7 +142,13 @@ export default function ResultsView({ valuation, subject, onBack, rationaleLoadi
       {insufficient ? <InsufficientHero valuation={valuation} /> : <ValueHero valuation={valuation} />}
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-3">
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+              Subject
+            </h3>
+            <p className="mt-1 text-sm text-neutral-700">{subjectSummary(subject)}</p>
+          </div>
           <Panel
             title="Comparable sales"
             meta={`${valuation.comps.length} found, ${included.length} included, ${excluded.length} excluded`}

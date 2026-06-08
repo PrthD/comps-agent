@@ -97,23 +97,33 @@ def _classify(scored: list[ScoredComp]) -> None:
         sc.status = "included"
 
 
-def _exclusion_summary(scored: list[ScoredComp]) -> str:
-    """One-line count of excluded comps by reason, for the rationale (plain punctuation)."""
-    labels = {
-        "outlier": "$/sqft outlier",
-        "low_similarity": "low similarity",
-        "large_adjustment": "over-adjusted",
-    }
-    counts = {key: sum(1 for sc in scored if sc.status == key) for key in labels}
-    total = sum(counts.values())
+_EXCLUSION_LABELS = {
+    "outlier": "$/sqft outlier",
+    "low_similarity": "low similarity",
+    "large_adjustment": "over-adjusted",
+}
+
+
+def _exclusion_breakdown(scored: list[ScoredComp]) -> tuple[int, int, str]:
+    """Return (n_excluded, n_total, "N label, ...") for the rationale; asserts the tally ties."""
+    counts = {key: sum(1 for sc in scored if sc.status == key) for key in _EXCLUSION_LABELS}
+    n_excluded = sum(counts.values())
     # The categorized total must equal every non-"included" comp; a new status that escapes
-    # ``labels`` would undercount the rationale, so fail loudly rather than mislead the UI.
-    n_excluded = sum(1 for sc in scored if sc.status != "included")
-    assert total == n_excluded, f"exclusion tally mismatch: {total} categorized vs {n_excluded}"
-    if not total:
+    # ``_EXCLUSION_LABELS`` would undercount the rationale, so fail loudly rather than mislead.
+    n_other = sum(1 for sc in scored if sc.status != "included")
+    assert n_excluded == n_other, f"exclusion tally mismatch: {n_excluded} vs {n_other}"
+    breakdown = ", ".join(
+        f"{counts[key]} {_EXCLUSION_LABELS[key]}" for key in _EXCLUSION_LABELS if counts[key]
+    )
+    return n_excluded, len(scored), breakdown
+
+
+def _exclusion_summary(scored: list[ScoredComp]) -> str:
+    """One-line count of excluded comps by reason, for the insufficient-comps rationale."""
+    n_excluded, n_total, breakdown = _exclusion_breakdown(scored)
+    if not n_excluded:
         return ""
-    parts = [f"{counts[key]} {labels[key]}" for key in labels if counts[key]]
-    return f"Excluded {total} of {len(scored)} comps: " + ", ".join(parts) + "."
+    return f"Excluded {n_excluded} of {n_total} comps: {breakdown}."
 
 
 def _insufficient_valuation(scored: list[ScoredComp], n_included: int) -> Valuation:
@@ -150,22 +160,28 @@ def _rationale(
     n_used: int,
     point: float,
     conservative: float,
-    margin: float,
-    confidence: str,
     factors: dict[str, float],
 ) -> str:
-    text = (
-        f"Conservative value ${conservative:,.0f} (point estimate ${point:,.0f}) from "
-        f"{n_used} comparable sale(s) within {factors[config.CF_MEAN_DISTANCE_KM]:.1f} km, "
-        f"median age {factors[config.CF_MEDIAN_AGE_DAYS]:.0f} days. A {_pct(margin)} margin "
-        f"reflects price dispersion ({_pct(factors[config.CF_DISPERSION])}), distance, recency, "
-        f"and a {_pct(factors[config.CF_MEAN_ADJUSTMENT])} mean hedonic adjustment. "
-        f"Confidence: {confidence}."
+    """Templated lender rationale. No confidence label (it is on the badge), no raw margin figure.
+
+    Percentages use ``_pct`` (half-up) so dispersion and mean adjustment match the stat row exactly.
+    """
+    dispersion = factors[config.CF_DISPERSION]
+    s = "" if n_used == 1 else "s"
+    variability = "moderate" if dispersion > 0.15 else "manageable"
+    n_excluded, n_total, breakdown = _exclusion_breakdown(scored)
+    exclusion_sentence = (
+        f" Excluded {n_excluded} of {n_total} comparables: {breakdown}." if n_excluded else ""
     )
-    summary = _exclusion_summary(scored)
-    if summary:
-        text += " " + summary
-    return text
+    return (
+        f"Conservative value {conservative:,.0f} is positioned below the point estimate of "
+        f"{point:,.0f} based on {n_used} comparable sale{s} within "
+        f"{factors[config.CF_MEAN_DISTANCE_KM]:.1f} km, with a median sale age of "
+        f"{factors[config.CF_MEDIAN_AGE_DAYS]:.0f} days. The margin reflects {_pct(dispersion)} "
+        f"price dispersion among the included comparables and a "
+        f"{_pct(factors[config.CF_MEAN_ADJUSTMENT])} mean hedonic adjustment, indicating "
+        f"{variability} market variability.{exclusion_sentence}"
+    )
 
 
 def estimate_value(
@@ -230,7 +246,7 @@ def estimate_value(
         confidence=confidence,
         confidence_factors=factors,
         comps=scored,  # all comps, excluded ones included and marked with a status
-        rationale=_rationale(scored, len(usable), point, conservative, margin, confidence, factors),
+        rationale=_rationale(scored, len(usable), point, conservative, factors),
         mode="deterministic",
         elapsed_ms=0,
     )

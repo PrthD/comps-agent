@@ -61,7 +61,11 @@ export default function InputPanel({
     <div className="mx-auto max-w-3xl px-4 py-6">
       <div className="mb-4 flex items-baseline justify-between">
         <h2 className="text-base font-semibold text-neutral-900">Value a property</h2>
-        <span className="text-xs text-neutral-400">Extraction populates the form for review.</span>
+        <span className="text-xs text-neutral-400">
+          {tab === 'form'
+            ? 'Enter property details to value.'
+            : 'Extraction populates the form for review.'}
+        </span>
       </div>
 
       <div className="overflow-hidden rounded-md border border-neutral-200 bg-white">
