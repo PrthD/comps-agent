@@ -43,7 +43,19 @@ def _empty_factors(comp_count: float = 0.0) -> dict[str, float]:
     }
 
 
-def _empty_valuation() -> Valuation:
+def _empty_valuation(subject: Subject) -> Valuation:
+    """No comps at all. Distinguish an out-of-window as-of date (State A) from a barren location
+    within the dataset window (State B), since the fix the user needs differs."""
+    if subject.as_of_date < config.DATA_WINDOW_START or subject.as_of_date > config.DATA_WINDOW_END:
+        rationale = (
+            "No comparable sales found: the as-of date falls outside the dataset window "
+            "(2014-05 to 2015-05). Change the as-of date to a date within the dataset range."
+        )
+    else:
+        rationale = (
+            "No comparable sales were found in this area within the search radius. "
+            "Verify the subject location."
+        )
     return Valuation(
         conservative_value=0,
         point_estimate=0,
@@ -52,7 +64,7 @@ def _empty_valuation() -> Valuation:
         confidence="Low",
         confidence_factors=_empty_factors(),
         comps=[],
-        rationale="No comparable sales found before the as-of date within the widest search tier.",
+        rationale=rationale,
         mode="deterministic",
         elapsed_ms=0,
     )
@@ -174,8 +186,8 @@ def _rationale(
         f" Excluded {n_excluded} of {n_total} comparables: {breakdown}." if n_excluded else ""
     )
     return (
-        f"Conservative value {conservative:,.0f} is positioned below the point estimate of "
-        f"{point:,.0f} based on {n_used} comparable sale{s} within "
+        f"Conservative value ${conservative:,.0f} is positioned below the point estimate of "
+        f"${point:,.0f} based on {n_used} comparable sale{s} within "
         f"{factors[config.CF_MEAN_DISTANCE_KM]:.1f} km, with a median sale age of "
         f"{factors[config.CF_MEDIAN_AGE_DAYS]:.0f} days. The margin reflects {_pct(dispersion)} "
         f"price dispersion among the included comparables and a "
@@ -191,7 +203,7 @@ def estimate_value(
 ) -> Valuation:
     """Similarity-weighted estimate, [P25, P75] range, conservative headline, and confidence."""
     if not scored:
-        return _empty_valuation()
+        return _empty_valuation(subject)
 
     # 1. Hedonic + time adjustment for every comp (line items recorded on each ScoredComp).
     for sc in scored:

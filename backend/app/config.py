@@ -24,6 +24,10 @@ load_dotenv()
 # frontend form uses the same 2015-05-01 default; all input paths share this one value.
 # --------------------------------------------------------------------------------------
 DEFAULT_AS_OF_DATE: date = date(2015, 5, 1)
+# Inclusive bounds of the dataset window. An as-of date outside this range can find no comps; the
+# empty-result rationale uses it to say "outside the dataset window" vs "none near this location".
+DATA_WINDOW_START: date = date(2014, 5, 1)
+DATA_WINDOW_END: date = date(2015, 5, 31)
 
 # --------------------------------------------------------------------------------------
 # Paths & determinism (absolute + CWD-independent; single source of truth for the parquet)

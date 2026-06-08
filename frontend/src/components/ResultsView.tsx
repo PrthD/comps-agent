@@ -79,7 +79,43 @@ function ValueHero({ valuation }: { valuation: Valuation }) {
   )
 }
 
-function InsufficientHero({ valuation }: { valuation: Valuation }) {
+// Inclusive ISO bounds of the dataset window (string compare is correct for YYYY-MM-DD).
+const DATA_WINDOW_START = '2014-05-01'
+const DATA_WINDOW_END = '2015-05-31'
+
+// The three no-value states share point_estimate === 0 but need different guidance:
+//  A) as-of date outside the dataset window, B) date fine but no comps near the location,
+//  C) comps found but all excluded. Distinguish by date bounds, then comps.length.
+function emptyStateCopy(valuation: Valuation, subject: Subject): { headline: string; subtext: string } {
+  const outOfWindow = subject.as_of_date < DATA_WINDOW_START || subject.as_of_date > DATA_WINDOW_END
+  if (valuation.comps.length === 0) {
+    return outOfWindow
+      ? {
+          headline: 'No comparable sales found',
+          subtext:
+            'The as-of date is outside the dataset window. Set it to a date between May 2014 and May 2015.',
+        }
+      : {
+          headline: 'No comparable sales found',
+          subtext: 'No sales were found near this location. Try adjusting the map pin.',
+        }
+  }
+  return {
+    headline: 'Insufficient comparable sales',
+    subtext:
+      'Too few comps remained comparable after exclusions. The engine declines rather than valuing off one or two weak comps. See the rationale and table below.',
+  }
+}
+
+function InsufficientHero({
+  valuation,
+  headline,
+  subtext,
+}: {
+  valuation: Valuation
+  headline: string
+  subtext: string
+}) {
   return (
     <section className="rounded-md border border-neutral-200 bg-white px-5 py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -87,13 +123,8 @@ function InsufficientHero({ valuation }: { valuation: Valuation }) {
           <div className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">
             No defensible value
           </div>
-          <div className="mt-1 text-xl font-semibold text-neutral-900">
-            Insufficient comparable sales
-          </div>
-          <div className="mt-1 max-w-xl text-xs text-neutral-500">
-            Too few comps remained comparable after exclusions. The engine declines rather than
-            valuing off one or two weak comps. See the rationale and table below.
-          </div>
+          <div className="mt-1 text-xl font-semibold text-neutral-900">{headline}</div>
+          <div className="mt-1 max-w-xl text-xs text-neutral-500">{subtext}</div>
         </div>
         <div className="text-right text-xs text-neutral-400">
           <div className="flex items-center justify-end gap-1.5 text-neutral-500">
@@ -130,16 +161,22 @@ export default function ResultsView({ valuation, subject, onBack, rationaleLoadi
   const included = rows.filter((r) => r.sc.status === 'included')
   const excluded = rows.filter((r) => r.sc.status !== 'included')
 
+  const empty = insufficient ? emptyStateCopy(valuation, subject) : null
+
   return (
     <div className="mx-auto max-w-6xl space-y-4 px-4 py-6">
       <button
         onClick={onBack}
-        className="text-xs font-medium text-neutral-500 transition hover:text-neutral-900"
+        className="inline-flex items-center gap-1 self-start rounded border border-neutral-300 bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 transition hover:bg-neutral-50"
       >
         ← New valuation
       </button>
 
-      {insufficient ? <InsufficientHero valuation={valuation} /> : <ValueHero valuation={valuation} />}
+      {empty ? (
+        <InsufficientHero valuation={valuation} headline={empty.headline} subtext={empty.subtext} />
+      ) : (
+        <ValueHero valuation={valuation} />
+      )}
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-3">
