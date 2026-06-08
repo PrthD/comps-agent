@@ -1,8 +1,8 @@
-"""Download, clean, and bundle the King County sales dataset (BUILD_BRIEF §4, P0).
+"""Download, clean, and bundle the King County sales dataset.
 
 Source: the GeoDa Center data lab mirror of the Kaggle ``harlfoxem/housesalesprediction``
 dataset (CC0). The zip is downloaded and unpacked entirely in memory (no temp files, no extra
-dependencies), cleaned, and written to the bundled parquet via DuckDB — we deliberately skip
+dependencies), cleaned, and written to the bundled parquet via DuckDB, we deliberately skip
 ``pyarrow``, so all parquet I/O in this project goes through DuckDB.
 
 Usage (run from backend/):
@@ -30,7 +30,7 @@ from app.config import DATA_PATH  # noqa: E402  (import after sys.path bootstrap
 DEFAULT_URL = "https://geodacenter.github.io/data-and-lab//data/kingcounty.zip"
 DEFAULT_MEMBER = "kingcounty/kc_house_data.csv"
 
-# Raw KC columns we keep (BUILD_BRIEF §4) and their rename to schema-friendly names.
+# Raw KC columns we keep and their rename to schema-friendly names.
 RAW_COLUMNS = [
     "date",
     "price",

@@ -1,4 +1,4 @@
-"""Shared property-type mapping for subjects and comps (BUILD_BRIEF §5; P1 priority #2)."""
+"""Shared property-type mapping for subjects and comps."""
 
 from __future__ import annotations
 

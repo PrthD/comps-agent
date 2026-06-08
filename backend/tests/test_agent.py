@@ -1,6 +1,6 @@
-"""Offline tests for the Gemini agent layer (BUILD_BRIEF §7/§11, P3).
+"""Offline tests for the Gemini agent layer.
 
-The real Gemini API is NEVER called: the LLM seams are mocked — ``google.genai.Client`` for the
+The real Gemini API is NEVER called: the LLM seams are mocked, ``google.genai.Client`` for the
 extract/reason unit tests, and the agent functions for the orchestration tests. The point of these
 tests is the trust boundary (the LLM never overwrites a number), the ≤2-call budget, the bounded
 re-query, and the deterministic fallback.
@@ -370,7 +370,7 @@ def test_requery_runs_at_most_once(monkeypatch, make_subject, synthetic_store, h
     monkeypatch.setattr(orch, "_requery", counting_requery)
     valuation = orch.run_valuation(far_subject, store=synthetic_store, hedonic=hedonic_model)
 
-    assert calls["n"] == 1  # widened exactly once — never looped
+    assert calls["n"] == 1  # widened exactly once, never looped
     assert valuation.mode == "deterministic"
     assert isinstance(valuation.point_estimate, int)  # still a complete, valid Valuation
 

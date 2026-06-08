@@ -1,4 +1,4 @@
-"""$/sqft outlier flagging — Sam's #1 ask (BUILD_BRIEF §6/§11)."""
+"""$/sqft outlier flagging, Sam's #1 ask."""
 
 from __future__ import annotations
 

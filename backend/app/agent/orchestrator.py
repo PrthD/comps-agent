@@ -1,13 +1,13 @@
-"""Bounded agent loop with deterministic fallback (BUILD_BRIEF §7).
+"""Bounded agent loop with deterministic fallback.
 
-``value_deterministic`` is the pure pipeline (retrieve → score → flag → estimate) — it needs no API
+``value_deterministic`` is the pure pipeline (retrieve → score → flag → estimate), it needs no API
 key and is what both the backtest and the agent's fallback run. ``run_valuation`` wraps it with the
 Gemini layer: an optional one-shot, *deterministic* re-query (widen retrieval when the result is
-thin/low-confidence — NOT an LLM round-trip) and a single reasoning call for the prose rationale.
+thin/low-confidence, NOT an LLM round-trip) and a single reasoning call for the prose rationale.
 The trust boundary is absolute: the LLM only writes the rationale; every number comes from the core.
 
 Failure modes are first-class: with no key, or on any Gemini error/429, ``run_valuation`` returns a
-complete ``Valuation`` in ``mode="deterministic"`` with the templated rationale — it never breaks.
+complete ``Valuation`` in ``mode="deterministic"`` with the templated rationale, it never breaks.
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ from app.core.retrieve import _row_to_comp, haversine_km, search_comps
 from app.core.score import score_comps
 from app.schemas import Subject, Valuation
 
-# Loaded once (lazily, then cached) — the store + hedonic fit are reused across every valuation.
+# Loaded once (lazily, then cached), the store + hedonic fit are reused across every valuation.
 _STORE: pd.DataFrame | None = None
 _HEDONIC: HedonicModel | None = None
 
@@ -42,7 +42,7 @@ def _require_valuable(subject: Subject) -> None:
     """Fail fast with a clear error if a value-critical field is None (gate the subject first).
 
     ``/api/value`` enforces the completeness gate up front, so a valued subject always has these.
-    This guards direct callers from silent failures — e.g. None coords → NaN haversine distances.
+    This guards direct callers from silent failures, e.g. None coords → NaN haversine distances.
     """
     missing = [f for f in _VALUE_CRITICAL if getattr(subject, f) is None]
     if missing:
@@ -62,7 +62,7 @@ def init() -> tuple[pd.DataFrame, HedonicModel]:
 
 
 def store_size() -> int:
-    """Number of comps currently loaded (0 if ``init`` has not run) — for the health endpoint."""
+    """Number of comps currently loaded (0 if ``init`` has not run), for the health endpoint."""
     return 0 if _STORE is None else int(len(_STORE))
 
 
@@ -153,9 +153,7 @@ def _requery(subject: Subject, store: pd.DataFrame, hedonic: HedonicModel) -> Va
     return valuation
 
 
-def _value_with_requery(
-    subject: Subject, store: pd.DataFrame, hedonic: HedonicModel
-) -> Valuation:
+def _value_with_requery(subject: Subject, store: pd.DataFrame, hedonic: HedonicModel) -> Valuation:
     """Deterministic core + the one bounded re-query. No LLM; identical across both phases.
 
     Re-running this is safe and reproducible (pure functions, seeded), so the rationale phase can

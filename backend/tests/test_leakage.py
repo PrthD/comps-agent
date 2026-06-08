@@ -1,4 +1,4 @@
-"""Leakage guard (BUILD_BRIEF §6/§11) — authored BEFORE the retrieval implementation.
+"""Leakage guard, authored BEFORE the retrieval implementation.
 
 The core promise to a lender: when valuing a subject we never look at sales on or after the as-of
 date, and never the subject's own sale. Asserted directly against ``search_comps``.

@@ -1,8 +1,8 @@
-"""Shared fixtures for the core test suite (BUILD_BRIEF §11).
+"""Shared fixtures for the core test suite.
 
 Factories (``make_subject``/``make_comp``) build valid pydantic objects with sensible defaults;
 ``synthetic_store`` is a small, seeded King-County-shaped frame and ``hedonic_model`` is fit on it.
-No LLM, no network — these tests exercise only the deterministic core.
+No LLM, no network, these tests exercise only the deterministic core.
 """
 
 from __future__ import annotations

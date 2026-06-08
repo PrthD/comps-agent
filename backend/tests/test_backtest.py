@@ -1,4 +1,4 @@
-"""Backtest regression guard (BUILD_BRIEF §11/§12).
+"""Backtest regression guard.
 
 One eval test: on a fixed seed/sample the MdAPE stays in the honest band and coverage stays high.
 Runs the real leave-one-out pipeline on the bundled parquet (no LLM, no network).

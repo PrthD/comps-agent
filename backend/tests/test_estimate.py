@@ -1,4 +1,4 @@
-"""Estimate invariants and confidence behavior (BUILD_BRIEF §6/§11)."""
+"""Estimate invariants and confidence behavior."""
 
 from __future__ import annotations
 

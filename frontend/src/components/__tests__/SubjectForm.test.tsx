@@ -31,7 +31,7 @@ const baseSubject: Subject = {
   needs_review: null,
 }
 
-describe('SubjectForm — completeness gate', () => {
+describe('SubjectForm, completeness gate', () => {
   it('renders the gate banner and marks required fields when fields are missing', () => {
     render(
       <SubjectForm
@@ -55,7 +55,7 @@ describe('SubjectForm — completeness gate', () => {
   })
 })
 
-describe('SubjectForm — map click on the extraction path', () => {
+describe('SubjectForm, map click on the extraction path', () => {
   // Mirror App's updateSubject: any field change clears the stale gate result.
   function Harness({ onCommit }: { onCommit: (s: Subject) => void }) {
     const [subject, setSubject] = useState<Subject>({

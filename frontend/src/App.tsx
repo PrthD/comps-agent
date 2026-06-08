@@ -107,8 +107,9 @@ export default function App() {
             if (requestId.current === reqId) setRationaleLoading(false)
           })
       }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Valuation request failed')
+    } catch {
+      // Keep the message reassuring and free of internal detail; the request simply did not complete.
+      setError('Could not complete the valuation. Please check your connection and try again.')
     } finally {
       setValuing(false)
     }
@@ -150,8 +151,8 @@ export default function App() {
         {healthInfo
           ? `${healthInfo.comps_loaded.toLocaleString()} King County sales,`
           : 'King County sales,'}{' '}
-        2014 to 2015. The LLM normalizes and explains; every number is computed by a deterministic,
-        tested engine.
+        2014 to 2015. AI normalizes the input and writes the explanation; every number is computed
+        by a deterministic, tested engine.
       </footer>
     </div>
   )

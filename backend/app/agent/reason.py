@@ -1,9 +1,9 @@
-"""Gemini Flash reasoning: a lender-facing rationale over a FINISHED valuation (BUILD_BRIEF §7, P3).
+"""Gemini Flash reasoning: a lender-facing rationale over a FINISHED valuation.
 
 This is the LLM's EXPLAINER role on the trust boundary. It reads the subject and the completed
 ``Valuation`` (every figure already computed by the deterministic core) and writes plain English:
 why the conservative value is defensible, which comps drove it, what was adjusted, and what was
-flagged/excluded and why. It is strictly downstream of the numbers — it returns a *string* only, so
+flagged/excluded and why. It is strictly downstream of the numbers, it returns a *string* only, so
 it cannot change a figure, a range, a confidence level, or which comps were used. It may agree or
 disagree with the deterministic outlier flags in prose, but it cannot alter them. This is LLM call
 #2 of the ≤2-per-valuation budget; the caller assigns the result to ``Valuation.rationale``.
@@ -62,7 +62,7 @@ def _is_meta_commentary(text: str) -> bool:
     return any(marker in low for marker in _META_MARKERS)
 
 
-# Display formatters — the model must NEVER see a raw float or unformatted integer, so everything
+# Display formatters, the model must NEVER see a raw float or unformatted integer, so everything
 # is pre-formatted to the exact strings a person would read (dollars with commas, distance in km,
 # rates as whole percentages, age in whole days). Mirrors the frontend's number formatting.
 def _money(value: float) -> str:

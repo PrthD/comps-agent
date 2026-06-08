@@ -1,8 +1,8 @@
-"""Weighted-similarity scoring of candidate comps (BUILD_BRIEF §6).
+"""Weighted-similarity scoring of candidate comps.
 
-Each subscore is normalized to 0–1 (1 = identical) using ``config.SUBSCORE_SCALES``; the similarity
-is their ``config.SCORING_WEIGHTS`` weighted sum. Subscore dict keys are the SUBSCORE_* constants,
-so they can never drift from the weight keys.
+Each subscore is normalized to 0 to 1 (1 = identical) using ``config.SUBSCORE_SCALES``; the
+similarity is their ``config.SCORING_WEIGHTS`` weighted sum. Subscore dict keys are the SUBSCORE_*
+constants, so they can never drift from the weight keys.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ def _clamp01(x: float) -> float:
 
 
 def _diff_score(diff: float, scale: float) -> float:
-    """1 at zero difference, decaying linearly to 0 at ``scale`` (and clamped to 0–1)."""
+    """1 at zero difference, decaying linearly to 0 at ``scale`` (and clamped to 0 to 1)."""
     return _clamp01(1.0 - abs(diff) / scale)
 
 
@@ -47,7 +47,7 @@ def _subscores(subject: Subject, comp: Comp) -> dict[str, float]:
 
 
 def score_comps(subject: Subject, comps: list[Comp]) -> list[ScoredComp]:
-    """Score and rank candidates; keep the strongest TARGET_COMPS_MAX (BUILD_BRIEF §6)."""
+    """Score and rank candidates; keep the strongest TARGET_COMPS_MAX."""
     scored: list[ScoredComp] = []
     for comp in comps:
         subs = _subscores(subject, comp)
@@ -58,7 +58,7 @@ def score_comps(subject: Subject, comps: list[Comp]) -> list[ScoredComp]:
                 similarity=round(_clamp01(similarity), 4),
                 subscores=subs,
                 adjustments={},
-                adjusted_price=comp.sale_price,  # placeholder until hedonic adjustment
+                adjusted_price=comp.sale_price,  # initial value, replaced by the hedonic adjustment
             )
         )
     scored.sort(key=lambda sc: sc.similarity, reverse=True)

@@ -1,10 +1,9 @@
-"""Central configuration for the comps valuation agent (BUILD_BRIEF §9).
+"""Central configuration for the comps valuation agent.
 
-Every tunable number the deterministic core relies on — scoring weights, retrieval radii and
-time windows, the outlier band, confidence thresholds, the conservative-margin coefficients —
-lives here, never hardcoded inside logic. Defaults follow §6 and will be validated/tuned against
-the P2 backtest. Secrets and deployment-specific values come from the environment via a local
-``.env`` (see ``.env.example``); nothing secret is ever committed.
+Every tunable number the deterministic core relies on lives here, never hardcoded inside logic:
+scoring weights, retrieval radii and time windows, the outlier band, confidence thresholds, and
+the conservative-margin coefficients. Secrets and deployment-specific values come from the
+environment via a local ``.env`` (see ``.env.example``); nothing secret is ever committed.
 """
 
 from __future__ import annotations
@@ -18,7 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --------------------------------------------------------------------------------------
-# Data window — the bundled King County store spans 2014-05..2015-05. Any path that builds
+# Data window, the bundled King County store spans 2014-05..2015-05. Any path that builds
 # a Subject without an explicit as-of date (the extraction path) must default INSIDE this
 # window, or the recency tiers match nothing and every valuation comes back empty. The
 # frontend form uses the same 2015-05-01 default; all input paths share this one value.
@@ -46,12 +45,12 @@ ALLOWED_ORIGINS: list[str] = [
     o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if o.strip()
 ]
 
-# Gemini model IDs (env-overridable so P3 can move to Gemini 3 Flash without code changes).
+# Gemini model IDs (env-overridable so the models can change without code changes).
 GEMINI_REASONING_MODEL: str = os.getenv("GEMINI_REASONING_MODEL", "gemini-2.5-flash")
 GEMINI_EXTRACTION_MODEL: str = os.getenv("GEMINI_EXTRACTION_MODEL", "gemini-2.5-flash-lite")
 
 # --------------------------------------------------------------------------------------
-# Canonical dict keys — single source of truth so config and code can never drift.
+# Canonical dict keys, single source of truth so config and code can never drift.
 # SUBSCORE_* keys double as SCORING_WEIGHTS keys AND ScoredComp.subscores keys; CF_* keys name
 # the metrics in Valuation.confidence_factors; CT_* keys key CONFIDENCE_THRESHOLDS. Code imports
 # these constants instead of re-typing the metric-name strings.
@@ -80,7 +79,7 @@ CT_MAX_MEAN_ADJUSTMENT = "max_mean_adjustment"
 DAYS_PER_YEAR: float = 365.25
 
 # --------------------------------------------------------------------------------------
-# Scoring weights (§6) — weighted sum of normalized 0–1 subscores. Must sum to 1.0.
+# Scoring weights, weighted sum of normalized 0 to 1 subscores. Must sum to 1.0.
 # --------------------------------------------------------------------------------------
 SCORING_WEIGHTS: dict[str, float] = {
     SUBSCORE_DISTANCE: 0.30,
@@ -93,35 +92,35 @@ SCORING_WEIGHTS: dict[str, float] = {
 assert abs(sum(SCORING_WEIGHTS.values()) - 1.0) < 1e-9, "SCORING_WEIGHTS must sum to 1.0"
 
 # --------------------------------------------------------------------------------------
-# Retrieval (§6) — widen progressively until enough candidates; target 10–20.
+# Retrieval, widen progressively until enough candidates; target 10 to 20.
 # Each tier is (radius_km, time_window_days).
 # --------------------------------------------------------------------------------------
 RETRIEVAL_TIERS: list[tuple[float, int]] = [(2.0, 180), (5.0, 365), (10.0, 540)]
 TARGET_COMPS_MIN: int = 10
 TARGET_COMPS_MAX: int = 20
 
-# Subscore normalization scales — each subscore decays to 0 at its scale. Distance/recency
+# Subscore normalization scales, each subscore decays to 0 at its scale. Distance/recency
 # reuse the widest retrieval tier so a candidate at the search boundary contributes ~0.
 SUBSCORE_SCALES: dict[str, float] = {
     "distance_km": RETRIEVAL_TIERS[-1][0],  # widest radius (km)
     "recency_days": float(RETRIEVAL_TIERS[-1][1]),  # widest time window (days)
     "living_area_frac": 0.50,  # |Δsqft| / subject_sqft at which area similarity hits 0
     "grade": 4.0,  # KC grade points
-    "condition": 4.0,  # condition 1–5 → max spread 4
+    "condition": 4.0,  # condition 1 to 5 → max spread 4
     "age_years": 30.0,  # |Δyear_built| in years
     "beds": 2.0,
     "baths": 2.0,
 }
 
 # --------------------------------------------------------------------------------------
-# Outlier flagging (§6) — Sam's #1 ask. Robust $/sqft band on the candidate set.
+# Outlier flagging, Sam's #1 ask. Robust $/sqft band on the candidate set.
 # --------------------------------------------------------------------------------------
 OUTLIER_METHOD: str = "mad"  # "mad" (median ± k·MAD) or "iqr" (Q1−m·IQR / Q3+m·IQR)
 OUTLIER_K_MAD: float = 3.0
 OUTLIER_IQR_MULT: float = 1.5
 
 # --------------------------------------------------------------------------------------
-# Hedonic adjustment + time index (§6)
+# Hedonic adjustment + time index
 # --------------------------------------------------------------------------------------
 HEDONIC_FEATURES: list[str] = ["sqft_living", "beds", "baths", "grade", "age"]
 # Log-transform these features → elasticities (scale-free), so raw size scales don't swamp the
@@ -130,7 +129,7 @@ HEDONIC_LOG_FEATURES: list[str] = ["sqft_living"]
 HEDONIC_USE_ZIP: bool = True  # add zip dummies to the log(price) regression
 # Expected economic sign of each feature's effect on price. Adjustment coefficients are clamped to
 # this half-line so we never apply a backwards adjustment (e.g. paying MORE for FEWER beds); a
-# wrong-signed coefficient is clamped to 0 (no adjustment) and surfaced — never applied silently.
+# wrong-signed coefficient is clamped to 0 (no adjustment) and surfaced, never applied silently.
 HEDONIC_EXPECTED_SIGN: dict[str, int] = {
     "sqft_living": 1,
     "beds": 1,
@@ -144,7 +143,7 @@ HEDONIC_IMPLIED_PPSF_RANGE: tuple[float, float] = (150.0, 400.0)
 TIME_INDEX_FREQ: str = "M"  # monthly $/sqft index for the time adjustment
 
 # --------------------------------------------------------------------------------------
-# Conservative anchor (§6) — headline = min(point · (1 − margin), P25).
+# Conservative anchor, headline = min(point · (1 − margin), P25).
 # margin scales with dispersion, mean distance, and staleness, then is capped.
 # --------------------------------------------------------------------------------------
 CONSERVATIVE_BASE_MARGIN: float = 0.02
@@ -157,15 +156,15 @@ CONSERVATIVE_ADJUSTMENT_COEF: float = 0.50
 CONSERVATIVE_MARGIN_CAP: float = 0.25  # never discount the point estimate by more than 25%
 
 # --------------------------------------------------------------------------------------
-# Comp-quality gate (P5 review) — exclude indefensible comps from the estimate. Excluded comps
-# stay visible in the table with a status, but never drive the point/range/conservative figures.
+# Comp-quality gate: exclude indefensible comps from the estimate. Excluded comps stay visible
+# in the table with a status, but never drive the point/range/conservative figures.
 # --------------------------------------------------------------------------------------
 MAX_ADJUSTMENT_FRACTION: float = 0.30  # exclude if |adjusted - sale| / sale exceeds this
 MIN_SIMILARITY_FOR_ESTIMATE: float = 0.45  # exclude comps scoring below this similarity
 MIN_COMPS_FOR_ESTIMATE: int = 3  # fewer included than this → "insufficient comparable sales"
 
 # --------------------------------------------------------------------------------------
-# Confidence thresholds (§6) — High if every High bound is met; else Medium if every Medium
+# Confidence thresholds, High if every High bound is met; else Medium if every Medium
 # bound is met; else Low. ``dispersion`` = coefficient of variation of adjusted prices.
 # --------------------------------------------------------------------------------------
 CONFIDENCE_THRESHOLDS: dict[str, dict[str, float]] = {

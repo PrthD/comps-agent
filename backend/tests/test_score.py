@@ -1,4 +1,4 @@
-"""Scoring monotonicity and key-drift guard (BUILD_BRIEF §6/§11)."""
+"""Scoring monotonicity and key-drift guard."""
 
 from __future__ import annotations
 

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { Subject } from '../../api'
 import { formatFactor, formatPercent, subjectSummary } from '../format'
 
-describe('formatPercent — half-up, matches the backend rationale rounding', () => {
+describe('formatPercent, half-up, matches the backend rationale rounding', () => {
   it('rounds half up at exact ties so the stat row can never disagree with the prose', () => {
     // x.5 percentages that are EXACTLY representable as doubles (the only place rounding modes can
     // diverge). Half-up gives 13/38/63; Python banker's round would give 12/38/62, so the backend
@@ -22,7 +22,7 @@ describe('formatPercent — half-up, matches the backend rationale rounding', ()
   })
 })
 
-describe('subjectSummary — tight descriptor, nulls omitted', () => {
+describe('subjectSummary, tight descriptor, nulls omitted', () => {
   const base: Subject = {
     property_type: 'detached',
     beds: 3,

@@ -1,8 +1,8 @@
-"""$/sqft robust-band outlier flagging — Sam's #1 ask (BUILD_BRIEF §6).
+"""$/sqft robust-band outlier flagging, Sam's #1 ask.
 
 Flags candidates whose price-per-sqft falls outside a robust band on the candidate set (median ±
 k·MAD by default, or IQR fences), marks them with a human-readable reason, and leaves them in the
-list so the UI can show them — but ``estimate.py`` excludes flagged comps from the number.
+list so the UI can show them, but ``estimate.py`` excludes flagged comps from the number.
 """
 
 from __future__ import annotations

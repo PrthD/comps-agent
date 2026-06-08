@@ -1,5 +1,5 @@
 // Typed client for the FastAPI backend. These interfaces mirror the pydantic schemas (schemas.py);
-// every numeric field is produced by the deterministic core — the UI only displays them.
+// every numeric field is produced by the deterministic core, the UI only displays them.
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000').replace(/\/+$/, '')
 
@@ -124,7 +124,7 @@ export async function getSamples(): Promise<Sample[]> {
   return res.json()
 }
 
-/** POST /api/extract — multipart file OR text. Extraction only; never auto-values. */
+/** POST /api/extract, multipart file OR text. Extraction only; never auto-values. */
 export async function extractSubject(input: { file?: File; text?: string }): Promise<Subject> {
   const form = new FormData()
   if (input.file) form.append('file', input.file)
@@ -138,7 +138,7 @@ export type ValueResult =
   | { ok: true; valuation: Valuation }
   | { ok: false; incomplete: IncompleteSubject }
 
-/** POST /api/value — 200 Valuation, or the gate's 422 incomplete_subject (returned, not thrown). */
+/** POST /api/value, 200 Valuation, or the gate's 422 incomplete_subject (returned, not thrown). */
 export async function valueSubject(subject: Subject): Promise<ValueResult> {
   const res = await fetch(`${API_BASE}/api/value`, {
     method: 'POST',
@@ -156,7 +156,7 @@ export async function valueSubject(subject: Subject): Promise<ValueResult> {
   return { ok: true, valuation: await res.json() }
 }
 
-/** POST /api/rationale — the slow LLM prose for an already-valued subject (progressive render). */
+/** POST /api/rationale, the slow LLM prose for an already-valued subject (progressive render). */
 export async function fetchRationale(subject: Subject): Promise<Rationale> {
   const res = await fetch(`${API_BASE}/api/rationale`, {
     method: 'POST',

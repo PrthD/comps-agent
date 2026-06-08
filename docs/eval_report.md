@@ -1,12 +1,12 @@
-# Evaluation Report — Deterministic Comps Engine
+# Evaluation Report, Deterministic Comps Engine
 
-Leave-one-out backtest on the King County dataset (BUILD_BRIEF §12). Each held-out sale is valued
+Leave-one-out backtest on the King County dataset. Each held-out sale is valued
 as-of its **true sale date** using only sales **strictly before** that date (leakage guard), and
-never its own row. Accuracy is measured against the **point estimate** — the conservative value is
+never its own row. Accuracy is measured against the **point estimate**, the conservative value is
 deliberately biased low and is *not* the accuracy target.
 
 ## Run
-- Sample: **400** subjects · random seed **42** · wall time 9.2s
+- Sample: **400** subjects · random seed **42** · wall time 8.9s
 - Valued: **383** · refused as "insufficient comparable sales": **17**
 
 Accuracy is measured over the **valued** subjects (a refused subject produces no number, so it
@@ -28,7 +28,7 @@ value off one or two weak comps.
 Off-market valuation is hard: Zillow's off-market median error is ~7% with a mature ML stack and
 nationwide data. An MdAPE of **9.8%** on a single market with a transparent, auditable
 hedonic + comps pipeline is an honest, credible result. The value proposition is a **defensible,
-explainable** valuation at speed — not state-of-the-art accuracy.
+explainable** valuation at speed, not state-of-the-art accuracy.
 
 ## Comp-quality gate
 Only genuinely comparable comps drive the estimate. A comp is excluded (still shown in the UI with
@@ -56,13 +56,13 @@ essentially unchanged.
 - `sqft_living`: log-elasticity **0.5015** (scale-free; fixes raw-scale swamping).
 - Fitted coefficients: `{'sqft_living': 0.5015, 'beds': -0.0259, 'baths': 0.0453, 'grade': 0.1335, 'age': 0.0022}`
 - Applied (sign-clamped) coefficients: `{'sqft_living': 0.5015, 'beds': 0.0, 'baths': 0.0453, 'grade': 0.1335, 'age': 0.0}`
-- Clamped to 0 — backwards-signed, never applied: `['beds', 'age']`
-- Implied $/sqft level: **$247** (sane band $150–$400).
+- Clamped to 0, backwards-signed, never applied: `['beds', 'age']`
+- Implied $/sqft level: **$247** (sane band $150 to $400).
   Implied marginal $/sqft: $123 (diminishing returns).
 
 ## Limitations
 - King County is a stand-in for MLS sold-comp structure; the pipeline is geography-agnostic.
 - The hedonic model is fit once on the full dataset (per-subject influence ~1/N, negligible); the
   leakage rule is enforced at the comp level and asserted per subject.
-- The monthly time index is clamped to the data window (May 2014–May 2015) — no extrapolation.
+- The monthly time index is clamped to the data window (May 2014 to May 2015), no extrapolation.
 - `property_type` is a documented heuristic (KC lacks a true type label).

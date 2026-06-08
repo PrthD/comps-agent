@@ -1,8 +1,8 @@
-"""Leave-one-out backtest over a random holdout; lock a baseline MdAPE (BUILD_BRIEF §12).
+"""Leave-one-out backtest over a random holdout; lock a baseline MdAPE.
 
 Each held-out sale is valued as-of its TRUE sale date using only sales strictly before it (the
 leakage guard in ``search_comps`` also drops its own row). Accuracy is measured against the
-``point_estimate`` — NOT ``conservative_value``, which is deliberately biased low. The hedonic model
+``point_estimate``, NOT ``conservative_value``, which is deliberately biased low. The hedonic model
 is validated (sane implied $/sqft) before any number is trusted; writes docs/eval_report.{md,json}.
 """
 
@@ -133,11 +133,11 @@ def render_markdown(r: BacktestReport) -> str:
     refused = r.n_sampled - r.n_valued
     cc = r.confidence_counts
     valued = max(r.n_valued, 1)
-    return f"""# Evaluation Report — Deterministic Comps Engine
+    return f"""# Evaluation Report, Deterministic Comps Engine
 
-Leave-one-out backtest on the King County dataset (BUILD_BRIEF §12). Each held-out sale is valued
+Leave-one-out backtest on the King County dataset. Each held-out sale is valued
 as-of its **true sale date** using only sales **strictly before** that date (leakage guard), and
-never its own row. Accuracy is measured against the **point estimate** — the conservative value is
+never its own row. Accuracy is measured against the **point estimate**, the conservative value is
 deliberately biased low and is *not* the accuracy target.
 
 ## Run
@@ -163,7 +163,7 @@ value off one or two weak comps.
 Off-market valuation is hard: Zillow's off-market median error is ~7% with a mature ML stack and
 nationwide data. An MdAPE of **{r.mdape:.1%}** on a single market with a transparent, auditable
 hedonic + comps pipeline is an honest, credible result. The value proposition is a **defensible,
-explainable** valuation at speed — not state-of-the-art accuracy.
+explainable** valuation at speed, not state-of-the-art accuracy.
 
 ## Comp-quality gate
 Only genuinely comparable comps drive the estimate. A comp is excluded (still shown in the UI with
@@ -191,15 +191,15 @@ essentially unchanged.
 - `sqft_living`: log-elasticity **{h["sqft_elasticity"]}** (scale-free; fixes raw-scale swamping).
 - Fitted coefficients: `{h["raw_coef"]}`
 - Applied (sign-clamped) coefficients: `{h["adj_coef"]}`
-- Clamped to 0 — backwards-signed, never applied: `{h["clamped_features"]}`
-- Implied $/sqft level: **${h["implied_level_ppsf"]:,.0f}** (sane band ${low:,.0f}–${high:,.0f}).
+- Clamped to 0, backwards-signed, never applied: `{h["clamped_features"]}`
+- Implied $/sqft level: **${h["implied_level_ppsf"]:,.0f}** (sane band ${low:,.0f} to ${high:,.0f}).
   Implied marginal $/sqft: ${h["implied_marginal_ppsf"]:,.0f} (diminishing returns).
 
 ## Limitations
 - King County is a stand-in for MLS sold-comp structure; the pipeline is geography-agnostic.
 - The hedonic model is fit once on the full dataset (per-subject influence ~1/N, negligible); the
   leakage rule is enforced at the comp level and asserted per subject.
-- The monthly time index is clamped to the data window (May 2014–May 2015) — no extrapolation.
+- The monthly time index is clamped to the data window (May 2014 to May 2015), no extrapolation.
 - `property_type` is a documented heuristic (KC lacks a true type label).
 """
 

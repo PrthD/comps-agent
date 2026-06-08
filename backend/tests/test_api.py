@@ -1,8 +1,8 @@
-"""Offline tests for the FastAPI layer (BUILD_BRIEF §8/§11, P4).
+"""Offline tests for the FastAPI layer.
 
 The real Gemini API is never called: extraction is mocked and valuation runs in deterministic mode
 (MODEL_AVAILABLE forced False). The TestClient context manager triggers the lifespan, so the real
-bundled store + hedonic are loaded once via ``orchestrator.init`` — these are true integration tests
+bundled store + hedonic are loaded once via ``orchestrator.init``, these are true integration tests
 of the routes and the completeness gate.
 """
 
@@ -96,7 +96,7 @@ def test_value_complete_subject_returns_valuation(client, monkeypatch):
 
 
 def test_value_is_deterministic_and_defers_reasoning(client, monkeypatch):
-    """FIX 3: /api/value never calls the reason LLM, even with a key — the value is phase 1."""
+    """/api/value never calls the reason LLM, even with a key; reasoning is a separate request."""
     monkeypatch.setattr(config, "MODEL_AVAILABLE", True)
     calls = {"n": 0}
 
@@ -143,8 +143,13 @@ def test_rationale_endpoint_gate_rejects_incomplete(client, monkeypatch):
     monkeypatch.setattr(config, "MODEL_AVAILABLE", True)
     resp = client.post(
         "/api/rationale",
-        json={"property_type": "detached", "baths": 2.0, "lat": None, "lng": None,
-              "as_of_date": "2015-05-01"},
+        json={
+            "property_type": "detached",
+            "baths": 2.0,
+            "lat": None,
+            "lng": None,
+            "as_of_date": "2015-05-01",
+        },
     )
 
     assert resp.status_code == 422

@@ -1,8 +1,8 @@
-"""Document / image / text → structured ``Subject`` via Gemini Flash-Lite (BUILD_BRIEF §7, P3).
+"""Document / image / text → structured ``Subject`` via Gemini Flash-Lite.
 
 This is the LLM's NORMALIZER role on the trust boundary: it reads a listing, an appraisal PDF, an
 image, or pasted text and maps the property's attributes into the ``Subject`` contract. It never
-values anything and never fabricates a value to fill a gap — a missing or ambiguous field comes
+values anything and never fabricates a value to fill a gap, a missing or ambiguous field comes
 back null, is recorded with low ``field_confidence``, and is added to ``needs_review``. Coordinates
 are deliberately never read from a document (listings don't carry them reliably); they are flagged
 for the caller (the form / API path supplies real lat/lng directly).
@@ -20,14 +20,14 @@ from app.core.data import derive_property_type
 from app.schemas import Subject
 
 # Structural fields the LLM may read off a document. ``property_type`` is handled separately (it is
-# advisory — retrieval re-derives it from grade) and lat/lng are intentionally excluded: never
+# advisory, retrieval re-derives it from grade) and lat/lng are intentionally excluded: never
 # inferred from a document, always supplied by the caller.
 _NUMERIC = ("beds", "baths", "sqft_living", "sqft_lot", "year_built", "condition", "grade")
 
 _SYSTEM_INSTRUCTION = (
     "You normalize one residential property's details from a listing, appraisal, or pasted text "
     "into a structured record for a lender's valuation tool. Extract ONLY what is explicitly "
-    "stated. If a field is absent, illegible, or ambiguous, leave it null — never guess, estimate, "
+    "stated. If a field is absent, illegible, or ambiguous, leave it null, never guess, estimate, "
     "average, or infer a value to fill a gap. List any field you DID populate but are unsure about "
     "in `uncertain_fields`. Do not output coordinates. You never estimate the property's value."
 )
@@ -79,9 +79,9 @@ def _sanitize(field: str, value):
 def _build_subject(extracted: _ExtractedSubject) -> Subject:
     """Map the LLM's optional fields onto a ``Subject``, recording confidence + needs_review.
 
-    Required-by-contract fields that are missing get an obvious placeholder (``sqft_living=1``;
-    ``lat=lng=0.0``) and are added to ``needs_review`` — a flagged placeholder, never a fabricated
-    real value. The caller/UI must resolve everything in ``needs_review`` before trusting a result.
+    Fields the document does not state are left as ``None`` (the canonical "not provided") and
+    added to ``needs_review``, never backfilled with a fabricated value. The caller/UI must resolve
+    everything in ``needs_review`` before trusting a result.
     """
     uncertain = set(extracted.uncertain_fields or [])
     confidence: dict[str, float] = {}
@@ -109,7 +109,7 @@ def _build_subject(extracted: _ExtractedSubject) -> Subject:
     needs_review.extend(("lat", "lng"))
 
     # Missing required fields are left as None (the canonical "not provided") and flagged in
-    # needs_review — never backfilled with a fabricated or placeholder value. The gate catches them.
+    # needs_review, never backfilled with a fabricated or placeholder value. The gate catches them.
     return Subject(
         property_type=property_type,
         beds=values.get("beds"),

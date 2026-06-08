@@ -18,7 +18,7 @@ const valuation = (over: Partial<Valuation> = {}): Valuation => ({
   ...over,
 })
 
-describe('RationalePanel — progressive render', () => {
+describe('RationalePanel, progressive render', () => {
   it('shows a loading state while reasoning, then drops in the prose', () => {
     // Phase 1: value is on screen, rationale still generating (no prose yet).
     const { rerender } = render(<RationalePanel valuation={valuation({ rationale: '' })} loading />)

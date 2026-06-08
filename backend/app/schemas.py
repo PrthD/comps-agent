@@ -1,4 +1,4 @@
-"""Pydantic v2 data contracts for the comps valuation agent (BUILD_BRIEF §5).
+"""Pydantic v2 data contracts for the comps valuation agent.
 
 These models are the trust boundary's type system: the LLM fills a ``Subject`` (with per-field
 confidence), while every numeric field on ``ScoredComp``/``Valuation`` is produced by the
@@ -24,7 +24,7 @@ class PropertyFeatures(BaseModel):
     sqft_living: int = Field(gt=0)
     sqft_lot: int | None = Field(default=None, gt=0)
     year_built: int | None = None
-    condition: int | None = Field(default=None, ge=1, le=5)  # KC condition, 1–5
+    condition: int | None = Field(default=None, ge=1, le=5)  # KC condition, 1 to 5
     grade: int | None = None  # KC construction grade
     lat: float = Field(ge=-90, le=90)
     lng: float = Field(ge=-180, le=180)
@@ -34,7 +34,7 @@ class Subject(PropertyFeatures):
     """The property being valued, from a document/form (via the LLM) or entered directly.
 
     The value-critical fields below are REQUIRED to produce a valuation, but are optional *on the
-    wire* so "not provided" is representable as ``None`` — the gate then catches absence
+    wire* so "not provided" is representable as ``None``, the gate then catches absence
     cleanly instead of relying on a 0.0/1 sentinel. (``Comp`` keeps them required: a real sale is
     always fully specified.) ``None`` is the canonical "not provided".
     """
@@ -46,13 +46,13 @@ class Subject(PropertyFeatures):
     lng: float | None = Field(default=None, ge=-180, le=180)
 
     as_of_date: date = Field(default_factory=date.today)  # backtest = the held-out sale date
-    # Extraction metadata — set by the agent's extract step; None for hand-entered subjects:
+    # Extraction metadata, set by the agent's extract step; None for hand-entered subjects:
     field_confidence: dict[str, float] | None = None
     needs_review: list[str] | None = None
 
 
 # Fields the deterministic math actually needs to value a subject. year_built/grade/condition are
-# intentionally absent — the core treats them as nullable (neutral subscores, no adjustment).
+# intentionally absent, the core treats them as nullable (neutral subscores, no adjustment).
 REQUIRED_FIELDS: tuple[str, ...] = ("sqft_living", "beds", "baths", "lat", "lng")
 
 
@@ -60,7 +60,7 @@ def required_fields_missing(subject: Subject) -> list[str]:
     """Single source of truth for the gate: which required-to-value fields are not provided.
 
     ``None`` is the canonical "not provided" (the wire sends null for empty fields, and the extract
-    path emits null for anything it could not read — it never fabricates a value). ``needs_review``
+    path emits null for anything it could not read, it never fabricates a value). ``needs_review``
     membership is the primary secondary signal; the old numeric sentinels (``sqft_living <= 1``,
     ``beds``/``baths == 0``) are kept only as a backstop for a direct API caller that still posts a
     placeholder. Returned sorted + de-duplicated; an empty list means "ready to value".
@@ -96,7 +96,7 @@ class ScoredComp(BaseModel):
 
     comp: Comp
     similarity: float = Field(ge=0, le=1)
-    subscores: dict[str, float]  # distance, recency, area, bed_bath, age, grade — each 0–1
+    subscores: dict[str, float]  # distance, recency, area, bed_bath, age, grade, each 0 to 1
     adjustments: dict[str, float]  # line-item $ deltas applied to sale_price
     adjusted_price: int
     flagged: bool = False  # True if excluded from the estimate (any non-"included" status)
@@ -126,8 +126,8 @@ class Valuation(BaseModel):
     range_low: int
     range_high: int
     confidence: Literal["High", "Medium", "Low"]
-    confidence_factors: dict[str, float]  # comp_count, mean_distance, recency, dispersion, ...
-    comps: list[ScoredComp]  # 10–20; flagged comps included and marked
+    confidence_factors: dict[str, float]  # named confidence metrics keyed by CF_* constants
+    comps: list[ScoredComp]  # 10 to 20; flagged comps included and marked
     rationale: str  # plain-English, written by the LLM (or a template in deterministic mode)
     mode: Literal["agent", "deterministic"]
     elapsed_ms: int

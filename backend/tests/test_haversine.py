@@ -1,4 +1,4 @@
-"""Haversine correctness (BUILD_BRIEF §11)."""
+"""Haversine correctness."""
 
 from __future__ import annotations
 

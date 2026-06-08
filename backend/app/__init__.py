@@ -1,1 +1,1 @@
-"""KV comps valuation agent — backend application package."""
+"""KV comps valuation agent, backend application package."""

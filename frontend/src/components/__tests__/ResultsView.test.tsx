@@ -67,7 +67,7 @@ const valuation: Valuation = {
   elapsed_ms: 142,
 }
 
-describe('ResultsView — headline', () => {
+describe('ResultsView, headline', () => {
   it('shows the conservative value as the labeled headline, with confidence and timing', () => {
     render(<ResultsView valuation={valuation} subject={subject} onBack={() => {}} />)
 

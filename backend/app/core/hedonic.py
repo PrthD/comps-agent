@@ -1,4 +1,4 @@
-"""Global hedonic regression for interpretable marginal $/feature (BUILD_BRIEF §6).
+"""Global hedonic regression for interpretable marginal $/feature.
 
 Fit once at boot: ``log(price) ~ log(sqft_living) + beds + baths + grade + age (+ zip)``
 with a plain sklearn ``LinearRegression`` (not a black box). Logging sqft gives a scale-free
@@ -37,8 +37,8 @@ class HedonicModel:
     min_period: pd.Period
     max_period: pd.Period
     sqft_elasticity: float  # log-log elasticity of price w.r.t. sqft (0 if sqft not logged)
-    implied_marginal_ppsf: float  # elasticity * median $/sqft — the marginal sqft rate
-    implied_level_ppsf: float  # median(model-predicted price / sqft) — the implied price LEVEL
+    implied_marginal_ppsf: float  # elasticity * median $/sqft, the marginal sqft rate
+    implied_level_ppsf: float  # median(model-predicted price / sqft), the implied price LEVEL
 
 
 def _feature_column(df: pd.DataFrame, feature: str) -> pd.Series:
@@ -117,13 +117,13 @@ def fit_hedonic(store: pd.DataFrame) -> HedonicModel:
 
 
 def validate_hedonic(model: HedonicModel) -> None:
-    """Assert the model's implied marginal $/sqft is sane before it's trusted (BUILD_BRIEF §6)."""
+    """Assert the model's implied marginal $/sqft is sane before it's trusted."""
     low, high = config.HEDONIC_IMPLIED_PPSF_RANGE
     ppsf = model.implied_level_ppsf
     if not (low <= ppsf <= high):
         raise ValueError(
             f"Implied $/sqft level ${ppsf:,.0f} is outside the sane band "
-            f"[${low:,.0f}, ${high:,.0f}] — hedonic scaling looks wrong; do not trust the backtest."
+            f"[${low:,.0f}, ${high:,.0f}], hedonic scaling looks wrong; do not trust the backtest."
         )
 
 

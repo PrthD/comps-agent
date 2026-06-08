@@ -1,4 +1,4 @@
-"""Adjustment grid → point estimate, range, conservative anchor, confidence (BUILD_BRIEF §6).
+"""Adjustment grid → point estimate, range, conservative anchor, confidence.
 
 Applies the hedonic + time adjustment to every comp, then estimates from the comps that are actually
 comparable. A comp is excluded (but still shown) when it is a $/sqft outlier, scores below the

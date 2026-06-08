@@ -9,12 +9,10 @@ export default function WarmingScreen({ state, onRetry }: Props) {
     <div className="mx-auto flex max-w-md flex-col items-center px-6 py-24 text-center">
       <div className="mb-4 h-6 w-6 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-700" />
       <h2 className="text-sm font-semibold text-neutral-900">
-        {warming ? 'Warming up the valuation engine' : 'Connecting to the valuation engine'}
+        {warming ? 'Starting up' : 'Connecting'}
       </h2>
       <p className="mt-1.5 text-xs leading-relaxed text-neutral-500">
-        {warming
-          ? 'The backend sleeps on the free tier and wakes in about 30 seconds. Retrying automatically.'
-          : 'Checking the API health endpoint.'}
+        {warming ? 'Starting up, this will take a few seconds.' : 'Connecting to the service.'}
       </p>
       {warming && (
         <button

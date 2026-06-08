@@ -1,4 +1,4 @@
-"""Candidate retrieval: hard filters + haversine, with progressive widening (BUILD_BRIEF §6).
+"""Candidate retrieval: hard filters + haversine, with progressive widening.
 
 Leakage rule (enforced FIRST): only comps with ``sale_date`` strictly before ``subject.as_of_date``.
 The strict ``<`` also excludes the subject's own sale in the backtest, where ``as_of_date`` equals
@@ -52,7 +52,7 @@ def _row_to_comp(rec: dict) -> Comp:
 
 
 def search_comps(subject: Subject, store: pd.DataFrame) -> list[Comp]:
-    """Return 10–20 leakage-safe, type-compatible candidates, widening radius/time as needed."""
+    """Return 10 to 20 leakage-safe, type-compatible candidates, widening radius/time as needed."""
     subject_type = derive_property_type(subject.grade)  # shared mapping, applied to the subject
     as_of = pd.Timestamp(subject.as_of_date)
     sale_dates = pd.to_datetime(store["sale_date"])

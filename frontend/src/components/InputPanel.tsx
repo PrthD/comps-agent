@@ -44,8 +44,11 @@ export default function InputPanel({
       onSubject(result)
       setExtracted(true)
       setTab('form')
-    } catch (e) {
-      setExtractError(e instanceof Error ? e.message : 'Extraction failed')
+    } catch {
+      // Never surface the underlying cause to the user; point them at the manual path instead.
+      setExtractError(
+        'Automated extraction is unavailable right now. Enter the property details manually using Fill form.',
+      )
     } finally {
       setExtracting(false)
     }
@@ -97,8 +100,8 @@ export default function InputPanel({
                 className="block w-full text-xs text-neutral-600 file:mr-3 file:rounded file:border-0 file:bg-accent file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-white hover:file:bg-accent-hover"
               />
               <p className="text-[11px] text-neutral-400">
-                PDF or image of a property listing or appraisal. If extraction is unavailable, use
-                Fill form to enter details manually.
+                PDF or image of a property listing or appraisal. The details are extracted for you
+                to review before valuing.
               </p>
               <button
                 onClick={() => file && runExtract({ file })}

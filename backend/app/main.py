@@ -1,18 +1,18 @@
-"""FastAPI application entrypoint (BUILD_BRIEF §8).
+"""FastAPI application entrypoint.
 
 Five routes, with the completeness gate as a first-class backend check:
 
-- ``GET  /api/health``    — readiness + keep-warm: status, model availability, comps loaded.
-- ``POST /api/extract``   — document/image/text → a Subject for the UI to review. Extraction ONLY;
+- ``GET  /api/health``, readiness + keep-warm: status, model availability, comps loaded.
+- ``POST /api/extract``, document/image/text → a Subject for the UI to review. Extraction ONLY;
   it never auto-chains into valuation (keeps the flow at ≤2 LLM calls and the gate meaningful).
-- ``POST /api/value``     — a complete Subject → Valuation, computed deterministically (no LLM, so
+- ``POST /api/value``, a complete Subject → Valuation, computed deterministically (no LLM, so
   it returns in ~sub-second). The completeness gate runs FIRST: an under-specified subject gets a
   distinct 422 ``incomplete_subject`` response and NO valuation, so a half-read document can never
   silently produce a misleading "no comps found".
-- ``POST /api/rationale`` — the SAME Subject → the LLM prose rationale (re-derived
+- ``POST /api/rationale``, the SAME Subject → the LLM prose rationale (re-derived
   deterministically, then reasoned). This is the slow (~10s) call; splitting it from ``/api/value``
   lets the UI render the value, stat row, map, and comp table at once and stream the analysis in.
-- ``GET  /api/samples``   — a few real King County demo subjects (incl. a sparse-comps and an
+- ``GET  /api/samples``, a few real King County demo subjects (incl. a sparse-comps and an
   outlier-heavy case) for the UI.
 
 The comps store + hedonic fit are loaded once at startup (``orchestrator.init`` in the lifespan),
@@ -77,7 +77,7 @@ _SAMPLES: list[dict] = [
     {
         "id": "wallingford-dense",
         "label": "Wallingford bungalow",
-        "description": "Dense urban Seattle — many recent, nearby comps (a few $/sqft outliers).",
+        "description": "Dense urban Seattle, many recent, nearby comps (a few $/sqft outliers).",
         "subject": _demo_subject(
             sqft_living=1800, sqft_lot=4000, year_built=1960, lat=47.6795, lng=-122.346
         ),
@@ -85,7 +85,7 @@ _SAMPLES: list[dict] = [
     {
         "id": "foothills-sparse",
         "label": "Cascade foothills home",
-        "description": "Rural east King County — sparse comps, wider margin, Low confidence.",
+        "description": "Rural east King County, sparse comps, wider margin, Low confidence.",
         "subject": _demo_subject(
             sqft_living=1700, sqft_lot=12000, year_built=1985, lat=47.60, lng=-121.72
         ),
@@ -93,7 +93,7 @@ _SAMPLES: list[dict] = [
     {
         "id": "columbia-city-outliers",
         "label": "Columbia City house",
-        "description": "High $/sqft dispersion neighborhood — several comps flagged and excluded.",
+        "description": "High $/sqft dispersion neighborhood, several comps flagged and excluded.",
         "subject": _demo_subject(
             sqft_living=1600, sqft_lot=5000, year_built=1950, lat=47.5453, lng=-122.275
         ),
@@ -124,19 +124,20 @@ async def extract(
 ) -> Subject:
     """Extract a Subject (field_confidence + needs_review) from an uploaded file OR pasted text.
 
-    Extraction only — the UI shows the result for review/editing, then calls ``/api/value``
+    Extraction only, the UI shows the result for review/editing, then calls ``/api/value``
     separately. Requires a configured model; the no-LLM path enters via the structured form instead.
     """
+    unavailable = "Automated extraction is unavailable. Enter the property details using Fill form."
     if not config.MODEL_AVAILABLE:
-        raise HTTPException(status_code=503, detail="extraction unavailable: no GEMINI_API_KEY")
+        raise HTTPException(status_code=503, detail=unavailable)
     if file is None and not text:
-        raise HTTPException(status_code=422, detail="provide either a file or text")
+        raise HTTPException(status_code=422, detail="Provide a file or text to extract.")
     try:
         if file is not None:
             return extract_subject(await file.read(), file.content_type)
         return extract_subject(text)
-    except Exception as exc:  # surface LLM/parse failures as a clean 502, never a 500 stack
-        raise HTTPException(status_code=502, detail=f"extraction failed: {exc}") from exc
+    except Exception as exc:  # keep the cause in the server traceback; the client gets safe copy
+        raise HTTPException(status_code=502, detail=unavailable) from exc
 
 
 def _incomplete_response(missing: list[str]) -> JSONResponse:
