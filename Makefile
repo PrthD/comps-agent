@@ -1,7 +1,7 @@
 .PHONY: install dev-backend dev-frontend dev \
         test-backend test-frontend test \
         lint-backend lint-frontend lint \
-        build data eval
+        build data eval docker-build
 
 # ── Install ───────────────────────────────────────────────────────────────────
 
@@ -56,3 +56,8 @@ data:
 
 eval:
 	cd backend && uv run python -m app.eval.backtest
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+
+docker-build:
+	docker build -t comps-agent ./backend
