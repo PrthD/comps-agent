@@ -1,23 +1,28 @@
 """FastAPI application entrypoint (BUILD_BRIEF §8).
 
-Four routes, with the completeness gate as a first-class backend check:
+Five routes, with the completeness gate as a first-class backend check:
 
-- ``GET  /api/health``  — readiness + keep-warm: status, model availability, comps loaded.
-- ``POST /api/extract`` — document/image/text → a Subject for the UI to review. Extraction ONLY;
+- ``GET  /api/health``    — readiness + keep-warm: status, model availability, comps loaded.
+- ``POST /api/extract``   — document/image/text → a Subject for the UI to review. Extraction ONLY;
   it never auto-chains into valuation (keeps the flow at ≤2 LLM calls and the gate meaningful).
-- ``POST /api/value``   — a complete Subject → Valuation. The completeness gate runs FIRST: an
-  under-specified subject gets a distinct 422 ``incomplete_subject`` response and NO valuation, so a
-  half-read document can never silently produce a misleading "no comps found".
-- ``GET  /api/samples`` — a few real King County demo subjects (incl. a sparse-comps and an
+- ``POST /api/value``     — a complete Subject → Valuation, computed deterministically (no LLM, so
+  it returns in ~sub-second). The completeness gate runs FIRST: an under-specified subject gets a
+  distinct 422 ``incomplete_subject`` response and NO valuation, so a half-read document can never
+  silently produce a misleading "no comps found".
+- ``POST /api/rationale`` — the SAME Subject → the LLM prose rationale (re-derived
+  deterministically, then reasoned). This is the slow (~10s) call; splitting it from ``/api/value``
+  lets the UI render the value, stat row, map, and comp table at once and stream the analysis in.
+- ``GET  /api/samples``   — a few real King County demo subjects (incl. a sparse-comps and an
   outlier-heavy case) for the UI.
 
 The comps store + hedonic fit are loaded once at startup (``orchestrator.init`` in the lifespan),
 never per request.
 
-Timing honesty: ``Valuation.elapsed_ms`` from ``/api/value`` measures exactly the valuation work
-the user waits on at "Value" (retrieve → score → flag → estimate → re-query → reasoning).
-Extraction is a separate, earlier ``/api/extract`` call the user reviews in between, so it is NOT
-folded into this number — the UI's "valued in X.Xs" reflects only the value step, as claimed.
+Timing honesty: ``Valuation.elapsed_ms`` from ``/api/value`` measures exactly the deterministic
+valuation work the user waits on for the value to appear (retrieve → score → flag → estimate →
+re-query). The LLM rationale is a separate, clearly-async ``/api/rationale`` call that streams in
+after, so the "valued in X" stamp reflects only the value step, as claimed. Extraction is a
+separate earlier ``/api/extract`` call the user reviews in between, also not folded in.
 """
 
 from __future__ import annotations
@@ -32,7 +37,7 @@ from fastapi.responses import JSONResponse
 from app import config
 from app.agent import orchestrator
 from app.agent.extract import extract_subject
-from app.schemas import Subject, Valuation, required_fields_missing
+from app.schemas import Rationale, Subject, Valuation, required_fields_missing
 
 
 @asynccontextmanager
@@ -134,20 +139,46 @@ async def extract(
         raise HTTPException(status_code=502, detail=f"extraction failed: {exc}") from exc
 
 
+def _incomplete_response(missing: list[str]) -> JSONResponse:
+    """The shared 422 the completeness gate returns (distinct from a generic validation error)."""
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "incomplete_subject",
+            "missing_fields": missing,
+            "message": (
+                "Cannot value: required fields are missing or unconfirmed. "
+                "Provide them (e.g. via the review form) and retry."
+            ),
+        },
+    )
+
+
 @app.post("/api/value", response_model=None)  # union return; we serialize Valuation ourselves
 def value(subject: Subject) -> Valuation | JSONResponse:
-    """Value a COMPLETE subject. Completeness gate runs first; incomplete → 422, no valuation."""
+    """Phase 1: value a COMPLETE subject deterministically (sub-second, no LLM). Gate runs first.
+
+    The prose rationale is fetched separately via ``/api/rationale`` so the UI renders the value,
+    stat row, map, and comp table at once and streams the analysis in. ``elapsed_ms`` here is the
+    deterministic compute time the user actually waits on at "Value"; an incomplete subject still
+    gets the distinct 422 ``incomplete_subject`` and NO valuation.
+    """
     missing = required_fields_missing(subject)
     if missing:
-        return JSONResponse(
-            status_code=422,
-            content={
-                "error": "incomplete_subject",
-                "missing_fields": missing,
-                "message": (
-                    "Cannot value: required fields are missing or unconfirmed. "
-                    "Provide them (e.g. via the review form) and retry."
-                ),
-            },
-        )
-    return orchestrator.run_valuation(subject)
+        return _incomplete_response(missing)
+    return orchestrator.value_only(subject)
+
+
+@app.post("/api/rationale", response_model=None)  # union return; we serialize Rationale ourselves
+def rationale(subject: Subject) -> Rationale | JSONResponse:
+    """Phase 2: the LLM rationale for the SAME subject, re-derived deterministically then reasoned.
+
+    Returns the prose plus ``mode`` ("agent", or "deterministic" on no key / empty result / any LLM
+    failure). The completeness gate runs first, mirroring ``/api/value``, so an incomplete subject
+    can never reach the model. This is the slow (~10s) call the UI makes after the value is shown.
+    """
+    missing = required_fields_missing(subject)
+    if missing:
+        return _incomplete_response(missing)
+    text, mode = orchestrator.generate_rationale(subject)
+    return Rationale(rationale=text, mode=mode)

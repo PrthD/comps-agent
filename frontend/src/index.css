@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+/* Design tokens. One restrained ink accent; everything else is neutral grayscale. */
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+  --color-accent: #1b3a5b;
+  --color-accent-hover: #142d47;
+  --radius: 4px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #fafafa; /* near-white canvas */
+  color: #171717; /* neutral-900 */
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums; /* all figures align */
+  font-feature-settings: 'tnum' 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Leaflet sits beneath app chrome and inherits the type. */
+.leaflet-container {
+  font: inherit;
+  z-index: 0;
+}

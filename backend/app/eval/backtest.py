@@ -38,6 +38,7 @@ class BacktestReport:
     within_5: float
     within_10: float
     within_20: float
+    confidence_counts: dict[str, int]
     seed: int
     elapsed_s: float
     hedonic: dict
@@ -102,6 +103,11 @@ def run_backtest(n: int = 400, seed: int | None = None) -> BacktestReport:
 
     apes = np.array([r["ape"] for r in records if "ape" in r], dtype=float)
     n_comps = np.array([r["n_comps"] for r in records], dtype=float)
+    # Confidence label distribution over the VALUED subjects (refused ones produce no number).
+    confidence_counts = {level: 0 for level in ("High", "Medium", "Low")}
+    for r in records:
+        if "ape" in r:
+            confidence_counts[r["confidence"]] += 1
     return BacktestReport(
         n_sampled=len(sample),
         n_valued=int(apes.size),
@@ -112,6 +118,7 @@ def run_backtest(n: int = 400, seed: int | None = None) -> BacktestReport:
         within_5=float((apes <= 0.05).mean()),
         within_10=float((apes <= 0.10).mean()),
         within_20=float((apes <= 0.20).mean()),
+        confidence_counts=confidence_counts,
         seed=seed,
         elapsed_s=elapsed,
         hedonic=_hedonic_summary(model),
@@ -123,6 +130,9 @@ def render_markdown(r: BacktestReport) -> str:
     """Render the human-readable eval report."""
     h = r.hedonic
     low, high = config.HEDONIC_IMPLIED_PPSF_RANGE
+    refused = r.n_sampled - r.n_valued
+    cc = r.confidence_counts
+    valued = max(r.n_valued, 1)
     return f"""# Evaluation Report — Deterministic Comps Engine
 
 Leave-one-out backtest on the King County dataset (BUILD_BRIEF §12). Each held-out sale is valued
@@ -132,7 +142,11 @@ deliberately biased low and is *not* the accuracy target.
 
 ## Run
 - Sample: **{r.n_sampled}** subjects · random seed **{r.seed}** · wall time {r.elapsed_s:.1f}s
-- Valued (≥1 comp): **{r.n_valued}**
+- Valued: **{r.n_valued}** · refused as "insufficient comparable sales": **{refused}**
+
+Accuracy is measured over the **valued** subjects (a refused subject produces no number, so it
+cannot have an error). This is deliberate: the engine declines rather than reporting a misleading
+value off one or two weak comps.
 
 ## Headline metrics (point estimate vs. actual sale price)
 | Metric | Value |
@@ -150,6 +164,28 @@ Off-market valuation is hard: Zillow's off-market median error is ~7% with a mat
 nationwide data. An MdAPE of **{r.mdape:.1%}** on a single market with a transparent, auditable
 hedonic + comps pipeline is an honest, credible result. The value proposition is a **defensible,
 explainable** valuation at speed — not state-of-the-art accuracy.
+
+## Comp-quality gate
+Only genuinely comparable comps drive the estimate. A comp is excluded (still shown in the UI with
+its status) when it is a $/sqft outlier, scores below the
+**{config.MIN_SIMILARITY_FOR_ESTIMATE:.0%}** similarity floor, or needs a hedonic adjustment above
+the **{config.MAX_ADJUSTMENT_FRACTION:.0%}** cap. If fewer than **{config.MIN_COMPS_FOR_ESTIMATE}**
+survive, the engine returns "insufficient comparable sales" rather than valuing off weak comps
+({refused} of {r.n_sampled} backtest subjects hit that gate). This trades a little coverage for
+defensibility; MdAPE on the subjects that do value is unchanged to slightly better.
+
+## Confidence calibration
+Confidence reflects not just comp count, distance, dispersion, and recency, but also the **mean
+hedonic adjustment** across the included comps: a set that only fits the subject after large average
+adjustments cannot be High (mean adjustment must be
+≤ {config.CONFIDENCE_THRESHOLDS["High"][config.CT_MAX_MEAN_ADJUSTMENT]:.0%}) or Medium
+(≤ {config.CONFIDENCE_THRESHOLDS["Medium"][config.CT_MAX_MEAN_ADJUSTMENT]:.0%}); above that it is
+Low. The same mean-adjustment term widens the conservative margin, so a stretched set yields a
+visibly lower, wider-margin defensible value. Confidence over the **{r.n_valued}** valued subjects:
+High **{cc["High"]}** ({cc["High"] / valued:.0%}), Medium **{cc["Medium"]}**
+({cc["Medium"] / valued:.0%}), Low **{cc["Low"]}** ({cc["Low"] / valued:.0%}). This calibration
+changes confidence labels and the conservative value, not the point estimate, so headline MdAPE is
+essentially unchanged.
 
 ## Hedonic model (validated before measuring)
 - `sqft_living`: log-elasticity **{h["sqft_elasticity"]}** (scale-free; fixes raw-scale swamping).
@@ -185,10 +221,12 @@ def main() -> None:
     tmin = config.TARGET_COMPS_MIN
     within = f"{report.within_5:.0%}/{report.within_10:.0%}/{report.within_20:.0%}"
     cov = f"{report.coverage_min1:.0%}/{report.coverage_min10:.0%}"
+    cc = report.confidence_counts
     print(
         f"n={report.n_sampled} valued={report.n_valued} | "
         f"MdAPE={report.mdape:.1%} MAPE={report.mape:.1%} | "
-        f"within 5/10/20%={within} | coverage(≥1/≥{tmin})={cov} | {report.elapsed_s:.1f}s"
+        f"within 5/10/20%={within} | coverage(≥1/≥{tmin})={cov} | "
+        f"conf H/M/L={cc['High']}/{cc['Medium']}/{cc['Low']} | {report.elapsed_s:.1f}s"
     )
     if not args.no_write:
         write_report(report)

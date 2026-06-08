@@ -34,6 +34,23 @@ _HEDONIC: HedonicModel | None = None
 
 _CONFIDENCE_RANK = {"Low": 0, "Medium": 1, "High": 2}
 
+# Fields the math cannot run without. Optional on the Subject wire, so guard before valuing.
+_VALUE_CRITICAL = ("sqft_living", "beds", "baths", "lat", "lng")
+
+
+def _require_valuable(subject: Subject) -> None:
+    """Fail fast with a clear error if a value-critical field is None (gate the subject first).
+
+    ``/api/value`` enforces the completeness gate up front, so a valued subject always has these.
+    This guards direct callers from silent failures — e.g. None coords → NaN haversine distances.
+    """
+    missing = [f for f in _VALUE_CRITICAL if getattr(subject, f) is None]
+    if missing:
+        raise ValueError(
+            f"cannot value subject: {missing} not provided (None); "
+            "run the completeness gate (required_fields_missing) before valuing"
+        )
+
 
 def init() -> tuple[pd.DataFrame, HedonicModel]:
     """Load the comps store and fit the hedonic model once; cache for the process lifetime."""
@@ -51,6 +68,7 @@ def store_size() -> int:
 
 def value_deterministic(subject: Subject, store: pd.DataFrame, hedonic: HedonicModel) -> Valuation:
     """Run the full deterministic valuation pipeline and stamp ``elapsed_ms``."""
+    _require_valuable(subject)  # guard: None coords/size would silently produce NaN/garbage
     start = time.perf_counter()
     candidates = search_comps(subject, store)
     scored = score_comps(subject, candidates)
@@ -58,6 +76,11 @@ def value_deterministic(subject: Subject, store: pd.DataFrame, hedonic: HedonicM
     valuation = estimate_value(subject, scored, hedonic)
     valuation.elapsed_ms = int((time.perf_counter() - start) * 1000)
     return valuation
+
+
+def _has_value(valuation: Valuation) -> bool:
+    """A real valuation, not the empty / insufficient-comps state (which zeroes every figure)."""
+    return valuation.point_estimate > 0
 
 
 def _usable_count(valuation: Valuation) -> int:
@@ -130,32 +153,85 @@ def _requery(subject: Subject, store: pd.DataFrame, hedonic: HedonicModel) -> Va
     return valuation
 
 
+def _value_with_requery(
+    subject: Subject, store: pd.DataFrame, hedonic: HedonicModel
+) -> Valuation:
+    """Deterministic core + the one bounded re-query. No LLM; identical across both phases.
+
+    Re-running this is safe and reproducible (pure functions, seeded), so the rationale phase can
+    re-derive the very same numbers the value phase already returned.
+    """
+    valuation = value_deterministic(subject, store, hedonic)
+    if _should_requery(valuation):
+        widened = _requery(subject, store, hedonic)
+        if widened is not None and _adopt_widened(valuation, widened):
+            valuation = widened
+    return valuation
+
+
+def value_only(
+    subject: Subject,
+    store: pd.DataFrame | None = None,
+    hedonic: HedonicModel | None = None,
+) -> Valuation:
+    """Phase 1 of the progressive flow: the fast (~sub-second) deterministic valuation, no LLM.
+
+    The UI renders this immediately (headline, stat row, map, comp table) and fetches the prose
+    separately via ``generate_rationale``. ``elapsed_ms`` is therefore the actual compute time the
+    user waits at "Value", ``mode`` is "deterministic", and ``rationale`` is the estimate template.
+    """
+    start = time.perf_counter()
+    if store is None or hedonic is None:
+        store, hedonic = init()
+    valuation = _value_with_requery(subject, store, hedonic)
+    valuation.mode = "deterministic"
+    valuation.elapsed_ms = int((time.perf_counter() - start) * 1000)
+    return valuation
+
+
+def generate_rationale(
+    subject: Subject,
+    store: pd.DataFrame | None = None,
+    hedonic: HedonicModel | None = None,
+) -> tuple[str, str]:
+    """Phase 2: re-derive the deterministic valuation and write its rationale. Returns text + mode.
+
+    The single LLM call of the value flow. Skipped for the empty / insufficient-comps state (zeroed
+    figures, nothing to reason about), so a confused model never emits meta-commentary over a $0
+    payload. Falls back to the deterministic template (mode "deterministic") with no key, on that
+    empty state, or on any reasoning failure (429, timeout, empty, or meta-commentary output), so
+    raw model text or an API error never reaches the user.
+    """
+    if store is None or hedonic is None:
+        store, hedonic = init()
+    valuation = _value_with_requery(subject, store, hedonic)
+    if config.MODEL_AVAILABLE and _has_value(valuation):
+        try:
+            return reason_over_valuation(subject, valuation), "agent"
+        except Exception:
+            return valuation.rationale, "deterministic"
+    return valuation.rationale, "deterministic"
+
+
 def run_valuation(
     subject: Subject,
     store: pd.DataFrame | None = None,
     hedonic: HedonicModel | None = None,
 ) -> Valuation:
-    """Value a ``Subject``: deterministic core → one bounded re-query → LLM rationale.
+    """Full one-shot valuation: deterministic core → bounded re-query → LLM rationale, in one call.
 
-    ``store``/``hedonic`` default to the cached singletons; tests inject a small store to stay
-    offline and fast. The only LLM call here is the reasoning step; extraction (when the input is a
-    document) happens upstream via ``extract_subject`` / ``value_document``, keeping the total ≤2.
+    Retained for the document path (``value_document``) and the backtest. The API uses the split
+    ``value_only`` + ``generate_rationale`` for progressive rendering; this keeps the synchronous
+    path intact. The only LLM call here is the reasoning step (extraction happens upstream), ≤2.
     """
     start = time.perf_counter()
     if store is None or hedonic is None:
         store, hedonic = init()
 
-    valuation = value_deterministic(subject, store, hedonic)
+    valuation = _value_with_requery(subject, store, hedonic)
 
-    # Bounded deterministic re-query: widen ONCE, adopt only if it improves comparability.
-    if _should_requery(valuation):
-        widened = _requery(subject, store, hedonic)
-        if widened is not None and _adopt_widened(valuation, widened):
-            valuation = widened
-
-    # Reasoning: the single LLM call. Any failure (no key, 429, empty) → deterministic fallback.
     mode = "deterministic"
-    if config.MODEL_AVAILABLE:
+    if config.MODEL_AVAILABLE and _has_value(valuation):
         try:
             valuation.rationale = reason_over_valuation(subject, valuation)
             mode = "agent"

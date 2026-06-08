@@ -12,6 +12,6 @@ from app.eval.backtest import run_backtest
 
 def test_backtest_mdape_and_coverage_regression():
     report = run_backtest(n=60, seed=config.SEED)
-    assert report.n_valued >= 50  # nearly every sampled subject is valued
-    assert report.coverage_min1 >= 0.9  # comps found for almost everyone
-    assert report.mdape < 0.16  # honest 8–15% band, with headroom over the ~10.9% baseline
+    assert report.n_valued >= 45  # most subjects value; some refused as insufficient (gated)
+    assert report.coverage_min1 >= 0.9  # comps retrieved for almost everyone
+    assert report.mdape < 0.16  # honest band; headroom over the baseline (n=60 9.1%, n=400 9.8%)

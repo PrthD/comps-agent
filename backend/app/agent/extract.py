@@ -108,17 +108,23 @@ def _build_subject(extracted: _ExtractedSubject) -> Subject:
     confidence["lat"] = confidence["lng"] = 0.0
     needs_review.extend(("lat", "lng"))
 
+    # Missing required fields are left as None (the canonical "not provided") and flagged in
+    # needs_review — never backfilled with a fabricated or placeholder value. The gate catches them.
     return Subject(
         property_type=property_type,
-        beds=float(values.get("beds", 0.0)),
-        baths=float(values.get("baths", 0.0)),
-        sqft_living=int(values.get("sqft_living", 1)),  # 1 = obvious flagged placeholder (gt=0)
+        beds=values.get("beds"),
+        baths=values.get("baths"),
+        sqft_living=values.get("sqft_living"),
         sqft_lot=values.get("sqft_lot"),
         year_built=values.get("year_built"),
         condition=values.get("condition"),
         grade=values.get("grade"),
-        lat=0.0,
-        lng=0.0,
+        lat=None,
+        lng=None,
+        # Default to the in-window date the form path uses, not date.today(): a today() default
+        # falls outside the 2014-05..2015-05 data window and returns zero comps. The user can
+        # still change it in the form.
+        as_of_date=config.DEFAULT_AS_OF_DATE,
         field_confidence=confidence,
         needs_review=sorted(set(needs_review)),
     )

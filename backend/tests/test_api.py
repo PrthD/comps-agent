@@ -22,6 +22,22 @@ def client():
         yield test_client
 
 
+# A complete, gate-passing King County subject (Wallingford), reused across value/rationale tests.
+COMPLETE_SUBJECT = {
+    "property_type": "detached",
+    "beds": 3.0,
+    "baths": 2.0,
+    "sqft_living": 1800,
+    "sqft_lot": 4000,
+    "year_built": 1960,
+    "condition": 3,
+    "grade": 7,
+    "lat": 47.6795,
+    "lng": -122.346,
+    "as_of_date": "2015-05-01",
+}
+
+
 def test_health_reflects_model_available(client, monkeypatch):
     monkeypatch.setattr(config, "MODEL_AVAILABLE", True)
     body = client.get("/api/health").json()
@@ -34,17 +50,15 @@ def test_health_reflects_model_available(client, monkeypatch):
 
 
 def test_value_gate_rejects_incomplete_subject(client, monkeypatch):
-    """A half-read doc (placeholder sqft/coords, missing beds) hits the gate, not a valuation."""
+    """A half-read doc (null coords, missing beds/sqft) hits the gate, not a valuation."""
     monkeypatch.setattr(config, "MODEL_AVAILABLE", False)
     payload = {
         "property_type": "detached",
-        "beds": 0.0,  # placeholder for "missing"
         "baths": 2.0,
-        "sqft_living": 1,  # extractor placeholder
-        "lat": 0.0,
-        "lng": 0.0,  # coordinate placeholder
+        "lat": None,  # coordinates absent → null (the canonical "not provided"), not a 0.0 sentinel
+        "lng": None,
         "as_of_date": "2015-05-01",
-        "needs_review": ["lat", "lng", "beds", "sqft_living"],
+        # beds and sqft_living omitted entirely → also null
     }
     resp = client.post("/api/value", json=payload)
 
@@ -79,6 +93,62 @@ def test_value_complete_subject_returns_valuation(client, monkeypatch):
     assert body["conservative_value"] > 0
     assert body["conservative_value"] <= body["point_estimate"]  # conservative headline
     assert len(body["comps"]) >= 1
+
+
+def test_value_is_deterministic_and_defers_reasoning(client, monkeypatch):
+    """FIX 3: /api/value never calls the reason LLM, even with a key — the value is phase 1."""
+    monkeypatch.setattr(config, "MODEL_AVAILABLE", True)
+    calls = {"n": 0}
+
+    def fake_reason(subject, valuation):
+        calls["n"] += 1
+        return "SHOULD NOT BE CALLED FROM /api/value"
+
+    monkeypatch.setattr("app.agent.orchestrator.reason_over_valuation", fake_reason)
+    resp = client.post("/api/value", json=COMPLETE_SUBJECT)
+
+    assert resp.status_code == 200
+    assert resp.json()["mode"] == "deterministic"
+    assert calls["n"] == 0  # reasoning is deferred to /api/rationale
+
+
+def test_rationale_endpoint_returns_agent_prose(client, monkeypatch):
+    """/api/rationale runs the (mocked) LLM over the re-derived valuation, returning prose+mode."""
+    monkeypatch.setattr(config, "MODEL_AVAILABLE", True)
+    monkeypatch.setattr(
+        "app.agent.orchestrator.reason_over_valuation",
+        lambda subject, valuation: "AGENT PROSE for the lender.",
+    )
+    resp = client.post("/api/rationale", json=COMPLETE_SUBJECT)
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["mode"] == "agent"
+    assert body["rationale"] == "AGENT PROSE for the lender."
+
+
+def test_rationale_endpoint_without_key_is_template(client, monkeypatch):
+    """No key → /api/rationale returns the deterministic template, mode 'deterministic'."""
+    monkeypatch.setattr(config, "MODEL_AVAILABLE", False)
+    resp = client.post("/api/rationale", json=COMPLETE_SUBJECT)
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["mode"] == "deterministic"
+    assert body["rationale"]  # non-empty templated rationale
+
+
+def test_rationale_endpoint_gate_rejects_incomplete(client, monkeypatch):
+    """The completeness gate runs on /api/rationale too: an incomplete subject can't be reasoned."""
+    monkeypatch.setattr(config, "MODEL_AVAILABLE", True)
+    resp = client.post(
+        "/api/rationale",
+        json={"property_type": "detached", "baths": 2.0, "lat": None, "lng": None,
+              "as_of_date": "2015-05-01"},
+    )
+
+    assert resp.status_code == 422
+    assert resp.json()["error"] == "incomplete_subject"
 
 
 def test_extract_returns_fields_and_does_not_value(client, monkeypatch, make_subject):

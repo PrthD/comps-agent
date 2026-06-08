@@ -1,15 +1,20 @@
 {
   "n_sampled": 400,
-  "n_valued": 399,
+  "n_valued": 383,
   "coverage_min1": 0.9975,
   "coverage_min10": 0.9875,
-  "mdape": 0.10249746207060154,
-  "mape": 0.1428774331741041,
-  "within_5": 0.2556390977443609,
-  "within_10": 0.49122807017543857,
-  "within_20": 0.7619047619047619,
+  "mdape": 0.09846415094339622,
+  "mape": 0.14020631213481766,
+  "within_5": 0.26109660574412535,
+  "within_10": 0.5013054830287206,
+  "within_20": 0.7728459530026109,
+  "confidence_counts": {
+    "High": 72,
+    "Medium": 238,
+    "Low": 73
+  },
   "seed": 42,
-  "elapsed_s": 10.151310998015106,
+  "elapsed_s": 9.217722267028876,
   "hedonic": {
     "sqft_elasticity": 0.5015,
     "raw_coef": {
@@ -51,23 +56,23 @@
     {
       "actual": 1038000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 1161006,
-      "ape": 0.11850289017341041
+      "confidence": "Medium",
+      "point_estimate": 1149153,
+      "ape": 0.10708381502890174
     },
     {
       "actual": 1490000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 2234664,
-      "ape": 0.4997744966442953
+      "point_estimate": 2483166,
+      "ape": 0.6665543624161074
     },
     {
       "actual": 711000,
       "n_comps": 11,
-      "confidence": "High",
-      "point_estimate": 691183,
-      "ape": 0.02787201125175809
+      "confidence": "Medium",
+      "point_estimate": 689620,
+      "ape": 0.030070323488045007
     },
     {
       "actual": 211000,
@@ -79,9 +84,9 @@
     {
       "actual": 790000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 773919,
-      "ape": 0.020355696202531647
+      "confidence": "Medium",
+      "point_estimate": 770602,
+      "ape": 0.024554430379746837
     },
     {
       "actual": 680000,
@@ -93,23 +98,23 @@
     {
       "actual": 384500,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 477602,
-      "ape": 0.2421378413524057
+      "confidence": "Medium",
+      "point_estimate": 479041,
+      "ape": 0.24588036410923278
     },
     {
       "actual": 605000,
       "n_comps": 11,
-      "confidence": "Medium",
-      "point_estimate": 461768,
-      "ape": 0.23674710743801652
+      "confidence": "Low",
+      "point_estimate": 436590,
+      "ape": 0.27836363636363637
     },
     {
       "actual": 638000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 640510,
-      "ape": 0.003934169278996865
+      "point_estimate": 652023,
+      "ape": 0.02197962382445141
     },
     {
       "actual": 385000,
@@ -129,8 +134,8 @@
       "actual": 365000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 388455,
-      "ape": 0.06426027397260274
+      "point_estimate": 387853,
+      "ape": 0.06261095890410959
     },
     {
       "actual": 160000,
@@ -142,9 +147,9 @@
     {
       "actual": 1070000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 1071152,
-      "ape": 0.0010766355140186916
+      "confidence": "Low",
+      "point_estimate": 1083393,
+      "ape": 0.012516822429906541
     },
     {
       "actual": 800000,
@@ -156,9 +161,9 @@
     {
       "actual": 795127,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 976317,
-      "ape": 0.22787554692520817
+      "confidence": "Medium",
+      "point_estimate": 924460,
+      "ape": 0.16265703466238726
     },
     {
       "actual": 355000,
@@ -184,9 +189,9 @@
     {
       "actual": 930000,
       "n_comps": 11,
-      "confidence": "High",
-      "point_estimate": 829037,
-      "ape": 0.10856236559139786
+      "confidence": "Low",
+      "point_estimate": 854325,
+      "ape": 0.08137096774193549
     },
     {
       "actual": 920000,
@@ -199,8 +204,8 @@
       "actual": 560000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 566645,
-      "ape": 0.011866071428571429
+      "point_estimate": 568453,
+      "ape": 0.015094642857142857
     },
     {
       "actual": 654000,
@@ -212,30 +217,30 @@
     {
       "actual": 549000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 481677,
-      "ape": 0.12262841530054645
+      "confidence": "Medium",
+      "point_estimate": 484308,
+      "ape": 0.1178360655737705
     },
     {
       "actual": 290000,
       "n_comps": 16,
-      "confidence": "High",
-      "point_estimate": 242736,
-      "ape": 0.1629793103448276
+      "confidence": "Medium",
+      "point_estimate": 239311,
+      "ape": 0.1747896551724138
     },
     {
       "actual": 275000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 198350,
-      "ape": 0.2787272727272727
+      "confidence": "Low",
+      "point_estimate": 211472,
+      "ape": 0.2310109090909091
     },
     {
       "actual": 329990,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 377178,
-      "ape": 0.14299827267492954
+      "confidence": "Medium",
+      "point_estimate": 373988,
+      "ape": 0.13333131307009302
     },
     {
       "actual": 750000,
@@ -255,8 +260,8 @@
       "actual": 515000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 549446,
-      "ape": 0.06688543689320388
+      "point_estimate": 541881,
+      "ape": 0.05219611650485437
     },
     {
       "actual": 605000,
@@ -283,22 +288,22 @@
       "actual": 984000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 871396,
-      "ape": 0.1144349593495935
+      "point_estimate": 859318,
+      "ape": 0.12670934959349595
     },
     {
       "actual": 827500,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 942838,
-      "ape": 0.13938126888217522
+      "confidence": "Medium",
+      "point_estimate": 944365,
+      "ape": 0.14122658610271904
     },
     {
       "actual": 485000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 399334,
-      "ape": 0.17663092783505155
+      "point_estimate": 403354,
+      "ape": 0.16834226804123711
     },
     {
       "actual": 306000,
@@ -311,13 +316,13 @@
       "actual": 1890000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 1682026,
-      "ape": 0.11003915343915344
+      "point_estimate": 1658698,
+      "ape": 0.12238201058201058
     },
     {
       "actual": 514000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 467345,
       "ape": 0.09076848249027238
     },
@@ -325,43 +330,41 @@
       "actual": 282613,
       "n_comps": 15,
       "confidence": "Low",
-      "point_estimate": 310370,
-      "ape": 0.09821558102422748
+      "point_estimate": 298559,
+      "ape": 0.05642344831978713
     },
     {
       "actual": 309000,
       "n_comps": 16,
       "confidence": "Medium",
-      "point_estimate": 333626,
-      "ape": 0.0796957928802589
+      "point_estimate": 332128,
+      "ape": 0.07484789644012944
     },
     {
       "actual": 400000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 362064,
-      "ape": 0.09484
+      "confidence": "Medium",
+      "point_estimate": 365216,
+      "ape": 0.08696
     },
     {
       "actual": 310000,
       "n_comps": 1,
-      "confidence": "Low",
-      "point_estimate": 248671,
-      "ape": 0.19783548387096775
+      "confidence": "Low"
     },
     {
       "actual": 253200,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 258817,
-      "ape": 0.02218404423380727
+      "point_estimate": 251877,
+      "ape": 0.005225118483412322
     },
     {
       "actual": 334009,
       "n_comps": 12,
-      "confidence": "Medium",
-      "point_estimate": 410897,
-      "ape": 0.23019738989069158
+      "confidence": "Low",
+      "point_estimate": 410799,
+      "ape": 0.22990398462316883
     },
     {
       "actual": 500000,
@@ -388,29 +391,29 @@
       "actual": 327000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 402422,
-      "ape": 0.23064831804281347
+      "point_estimate": 400572,
+      "ape": 0.22499082568807338
     },
     {
       "actual": 450000,
       "n_comps": 10,
-      "confidence": "Low",
-      "point_estimate": 528649,
-      "ape": 0.17477555555555555
+      "confidence": "Medium",
+      "point_estimate": 452823,
+      "ape": 0.006273333333333333
     },
     {
       "actual": 356000,
       "n_comps": 12,
-      "confidence": "Medium",
-      "point_estimate": 388418,
-      "ape": 0.091061797752809
+      "confidence": "Low",
+      "point_estimate": 384467,
+      "ape": 0.07996348314606741
     },
     {
       "actual": 525000,
       "n_comps": 16,
       "confidence": "Medium",
-      "point_estimate": 512624,
-      "ape": 0.023573333333333335
+      "point_estimate": 478082,
+      "ape": 0.08936761904761904
     },
     {
       "actual": 675000,
@@ -422,30 +425,30 @@
     {
       "actual": 875000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 1258342,
-      "ape": 0.43810514285714286
+      "confidence": "Low",
+      "point_estimate": 1124883,
+      "ape": 0.2855805714285714
     },
     {
       "actual": 345000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 380589,
-      "ape": 0.10315652173913044
+      "point_estimate": 381160,
+      "ape": 0.10481159420289855
     },
     {
       "actual": 695000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 738099,
-      "ape": 0.06201294964028777
+      "confidence": "Medium",
+      "point_estimate": 734848,
+      "ape": 0.05733525179856115
     },
     {
       "actual": 350000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 417826,
-      "ape": 0.19378857142857142
+      "point_estimate": 418762,
+      "ape": 0.19646285714285713
     },
     {
       "actual": 695000,
@@ -472,15 +475,15 @@
       "actual": 265000,
       "n_comps": 11,
       "confidence": "Medium",
-      "point_estimate": 232883,
-      "ape": 0.12119622641509434
+      "point_estimate": 218045,
+      "ape": 0.17718867924528303
     },
     {
       "actual": 630000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 521929,
-      "ape": 0.17154126984126983
+      "confidence": "Medium",
+      "point_estimate": 516181,
+      "ape": 0.18066507936507936
     },
     {
       "actual": 312000,
@@ -492,23 +495,23 @@
     {
       "actual": 156000,
       "n_comps": 12,
-      "confidence": "High",
-      "point_estimate": 152809,
-      "ape": 0.020455128205128206
+      "confidence": "Medium",
+      "point_estimate": 152014,
+      "ape": 0.02555128205128205
     },
     {
       "actual": 300000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 337230,
-      "ape": 0.1241
+      "confidence": "Medium",
+      "point_estimate": 337356,
+      "ape": 0.12452
     },
     {
       "actual": 1225000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 522710,
-      "ape": 0.5732979591836734
+      "point_estimate": 556304,
+      "ape": 0.5458742857142858
     },
     {
       "actual": 465000,
@@ -542,36 +545,36 @@
       "actual": 985000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 739692,
-      "ape": 0.24904365482233504
+      "point_estimate": 710625,
+      "ape": 0.2785532994923858
     },
     {
       "actual": 850000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 928161,
-      "ape": 0.09195411764705883
+      "point_estimate": 961028,
+      "ape": 0.13062117647058824
     },
     {
       "actual": 474900,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 474752,
-      "ape": 0.00031164455674878924
+      "confidence": "Medium",
+      "point_estimate": 470335,
+      "ape": 0.009612550010528532
     },
     {
       "actual": 997000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 926485,
-      "ape": 0.07072718154463391
+      "point_estimate": 950213,
+      "ape": 0.04692778335005015
     },
     {
       "actual": 1302000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 1379267,
-      "ape": 0.05934485407066052
+      "point_estimate": 1404109,
+      "ape": 0.07842473118279569
     },
     {
       "actual": 209900,
@@ -590,16 +593,14 @@
     {
       "actual": 1228000,
       "n_comps": 16,
-      "confidence": "High",
-      "point_estimate": 1393665,
-      "ape": 0.13490635179153093
+      "confidence": "Low"
     },
     {
       "actual": 856000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 746218,
-      "ape": 0.12825
+      "confidence": "Medium",
+      "point_estimate": 737147,
+      "ape": 0.13884696261682242
     },
     {
       "actual": 392000,
@@ -612,8 +613,8 @@
       "actual": 500000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 671685,
-      "ape": 0.34337
+      "point_estimate": 692288,
+      "ape": 0.384576
     },
     {
       "actual": 230000,
@@ -625,16 +626,16 @@
     {
       "actual": 1145000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 914459,
-      "ape": 0.20134585152838427
+      "confidence": "Medium",
+      "point_estimate": 915453,
+      "ape": 0.20047772925764193
     },
     {
       "actual": 560000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 560548,
-      "ape": 0.0009785714285714285
+      "confidence": "Medium",
+      "point_estimate": 561080,
+      "ape": 0.0019285714285714286
     },
     {
       "actual": 355000,
@@ -646,7 +647,7 @@
     {
       "actual": 785000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 763695,
       "ape": 0.02714012738853503
     },
@@ -660,9 +661,9 @@
     {
       "actual": 540000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 332269,
-      "ape": 0.38468703703703705
+      "confidence": "Low",
+      "point_estimate": 323627,
+      "ape": 0.40069074074074074
     },
     {
       "actual": 252000,
@@ -675,22 +676,22 @@
       "actual": 455000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 337609,
-      "ape": 0.2580021978021978
+      "point_estimate": 340274,
+      "ape": 0.25214505494505496
     },
     {
       "actual": 619850,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 673749,
-      "ape": 0.08695490844559167
+      "point_estimate": 667366,
+      "ape": 0.07665725578769057
     },
     {
       "actual": 1250000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 857802,
-      "ape": 0.3137584
+      "confidence": "Medium",
+      "point_estimate": 863445,
+      "ape": 0.309244
     },
     {
       "actual": 495000,
@@ -710,8 +711,8 @@
       "actual": 286651,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 257270,
-      "ape": 0.10249746207060154
+      "point_estimate": 255010,
+      "ape": 0.11038161387889803
     },
     {
       "actual": 261000,
@@ -723,7 +724,7 @@
     {
       "actual": 830000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 783106,
       "ape": 0.05649879518072289
     },
@@ -738,22 +739,20 @@
       "actual": 260000,
       "n_comps": 14,
       "confidence": "Medium",
-      "point_estimate": 211545,
-      "ape": 0.18636538461538463
+      "point_estimate": 214438,
+      "ape": 0.17523846153846154
     },
     {
       "actual": 1450000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 1592342,
-      "ape": 0.09816689655172414
+      "point_estimate": 1691087,
+      "ape": 0.16626689655172414
     },
     {
       "actual": 480000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 561157,
-      "ape": 0.16907708333333332
+      "confidence": "Low"
     },
     {
       "actual": 270000,
@@ -765,16 +764,16 @@
     {
       "actual": 1160000,
       "n_comps": 19,
-      "confidence": "Medium",
-      "point_estimate": 1486377,
-      "ape": 0.2813594827586207
+      "confidence": "Low",
+      "point_estimate": 1451082,
+      "ape": 0.25093275862068964
     },
     {
       "actual": 250000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 254054,
-      "ape": 0.016216
+      "point_estimate": 259166,
+      "ape": 0.036664
     },
     {
       "actual": 650000,
@@ -794,29 +793,27 @@
       "actual": 743700,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 767363,
-      "ape": 0.0318179373403254
+      "point_estimate": 723197,
+      "ape": 0.027568912195777867
     },
     {
       "actual": 1925000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 1833927,
-      "ape": 0.04731064935064935
+      "confidence": "Low"
     },
     {
       "actual": 316000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 196436,
-      "ape": 0.37836708860759494
+      "confidence": "Low",
+      "point_estimate": 199741,
+      "ape": 0.3679082278481013
     },
     {
       "actual": 235867,
       "n_comps": 15,
       "confidence": "Medium",
-      "point_estimate": 218143,
-      "ape": 0.07514404304120542
+      "point_estimate": 219675,
+      "ape": 0.06864885719494461
     },
     {
       "actual": 716000,
@@ -843,36 +840,34 @@
       "actual": 270000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 317355,
-      "ape": 0.1753888888888889
+      "point_estimate": 315711,
+      "ape": 0.1693
     },
     {
       "actual": 239000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 245138,
-      "ape": 0.025682008368200837
+      "point_estimate": 240939,
+      "ape": 0.00811297071129707
     },
     {
       "actual": 385195,
       "n_comps": 17,
       "confidence": "Medium",
-      "point_estimate": 248324,
-      "ape": 0.3553291190176404
+      "point_estimate": 266023,
+      "ape": 0.3093809628889264
     },
     {
       "actual": 273000,
       "n_comps": 16,
-      "confidence": "Low",
-      "point_estimate": 280329,
-      "ape": 0.026846153846153846
+      "confidence": "Low"
     },
     {
       "actual": 476900,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 464534,
-      "ape": 0.02592996435311386
+      "point_estimate": 461209,
+      "ape": 0.03290207590689872
     },
     {
       "actual": 551000,
@@ -891,30 +886,30 @@
     {
       "actual": 411100,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 401548,
-      "ape": 0.02323522257358307
+      "confidence": "Medium",
+      "point_estimate": 404240,
+      "ape": 0.016686937484796886
     },
     {
       "actual": 223000,
       "n_comps": 16,
       "confidence": "Low",
-      "point_estimate": 198382,
-      "ape": 0.11039461883408072
+      "point_estimate": 197648,
+      "ape": 0.11368609865470852
     },
     {
       "actual": 335500,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 378092,
       "ape": 0.12695081967213115
     },
     {
       "actual": 730000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 743520,
-      "ape": 0.018520547945205478
+      "confidence": "Medium",
+      "point_estimate": 749082,
+      "ape": 0.02613972602739726
     },
     {
       "actual": 197200,
@@ -927,15 +922,15 @@
       "actual": 725000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 850127,
-      "ape": 0.17258896551724137
+      "point_estimate": 856454,
+      "ape": 0.18131586206896552
     },
     {
       "actual": 342500,
       "n_comps": 10,
-      "confidence": "Medium",
-      "point_estimate": 356292,
-      "ape": 0.040268613138686134
+      "confidence": "Low",
+      "point_estimate": 349716,
+      "ape": 0.021068613138686132
     },
     {
       "actual": 340000,
@@ -947,9 +942,9 @@
     {
       "actual": 418000,
       "n_comps": 10,
-      "confidence": "Medium",
-      "point_estimate": 429853,
-      "ape": 0.02835645933014354
+      "confidence": "Low",
+      "point_estimate": 413543,
+      "ape": 0.01066267942583732
     },
     {
       "actual": 410000,
@@ -969,20 +964,20 @@
       "actual": 800000,
       "n_comps": 18,
       "confidence": "Low",
-      "point_estimate": 723921,
-      "ape": 0.09509875
+      "point_estimate": 742401,
+      "ape": 0.07199875
     },
     {
       "actual": 275000,
       "n_comps": 19,
       "confidence": "Medium",
-      "point_estimate": 334696,
-      "ape": 0.21707636363636362
+      "point_estimate": 328599,
+      "ape": 0.19490545454545455
     },
     {
       "actual": 617950,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 578936,
       "ape": 0.06313455781212073
     },
@@ -1004,41 +999,41 @@
       "actual": 1275000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 1128831,
-      "ape": 0.11464235294117647
+      "point_estimate": 1134897,
+      "ape": 0.10988470588235294
     },
     {
       "actual": 572500,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 602757,
-      "ape": 0.05285065502183406
+      "confidence": "Medium",
+      "point_estimate": 601214,
+      "ape": 0.05015545851528384
     },
     {
       "actual": 518500,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 567931,
-      "ape": 0.09533461909353906
+      "confidence": "Low",
+      "point_estimate": 563730,
+      "ape": 0.08723240115718418
     },
     {
       "actual": 710000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 803603,
-      "ape": 0.13183521126760564
+      "confidence": "Medium",
+      "point_estimate": 789893,
+      "ape": 0.11252535211267606
     },
     {
       "actual": 600000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 598615,
-      "ape": 0.0023083333333333332
+      "confidence": "Low",
+      "point_estimate": 594079,
+      "ape": 0.009868333333333333
     },
     {
       "actual": 467000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 489887,
       "ape": 0.049008565310492504
     },
@@ -1046,8 +1041,8 @@
       "actual": 309000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 241172,
-      "ape": 0.21950809061488674
+      "point_estimate": 236084,
+      "ape": 0.23597411003236246
     },
     {
       "actual": 362500,
@@ -1073,9 +1068,9 @@
     {
       "actual": 340000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 373575,
-      "ape": 0.09875
+      "confidence": "Low",
+      "point_estimate": 366735,
+      "ape": 0.07863235294117647
     },
     {
       "actual": 467500,
@@ -1087,79 +1082,79 @@
     {
       "actual": 829000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 674748,
       "ape": 0.18606996381182148
     },
     {
       "actual": 959750,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 675882,
-      "ape": 0.29577285751497784
+      "confidence": "Medium",
+      "point_estimate": 675040,
+      "ape": 0.29665016931492577
     },
     {
       "actual": 542000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 594170,
-      "ape": 0.09625461254612547
+      "confidence": "Medium",
+      "point_estimate": 591882,
+      "ape": 0.09203321033210332
     },
     {
       "actual": 2250000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 1509875,
-      "ape": 0.32894444444444443
+      "point_estimate": 1482525,
+      "ape": 0.3411
     },
     {
       "actual": 575000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 708968,
-      "ape": 0.23298782608695653
+      "point_estimate": 720386,
+      "ape": 0.25284521739130433
     },
     {
       "actual": 690000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 648836,
-      "ape": 0.05965797101449275
+      "point_estimate": 655188,
+      "ape": 0.05045217391304348
     },
     {
       "actual": 699950,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 654559,
-      "ape": 0.06484891777984142
+      "point_estimate": 652046,
+      "ape": 0.06843917422673049
     },
     {
       "actual": 408500,
       "n_comps": 20,
       "confidence": "High",
-      "point_estimate": 375522,
-      "ape": 0.08072949816401469
+      "point_estimate": 372970,
+      "ape": 0.0869767441860465
     },
     {
       "actual": 595000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 583239,
-      "ape": 0.01976638655462185
+      "confidence": "Medium",
+      "point_estimate": 576157,
+      "ape": 0.03166890756302521
     },
     {
       "actual": 313000,
       "n_comps": 18,
       "confidence": "Medium",
-      "point_estimate": 316144,
-      "ape": 0.010044728434504793
+      "point_estimate": 332080,
+      "ape": 0.06095846645367412
     },
     {
       "actual": 781000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 766739,
-      "ape": 0.018259923175416134
+      "confidence": "Medium",
+      "point_estimate": 758530,
+      "ape": 0.0287708066581306
     },
     {
       "actual": 371000,
@@ -1179,8 +1174,8 @@
       "actual": 331000,
       "n_comps": 20,
       "confidence": "High",
-      "point_estimate": 327290,
-      "ape": 0.01120845921450151
+      "point_estimate": 320257,
+      "ape": 0.03245619335347432
     },
     {
       "actual": 321000,
@@ -1200,8 +1195,8 @@
       "actual": 298000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 198704,
-      "ape": 0.33320805369127515
+      "point_estimate": 199525,
+      "ape": 0.33045302013422817
     },
     {
       "actual": 209500,
@@ -1220,16 +1215,16 @@
     {
       "actual": 350000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 403662,
-      "ape": 0.15332
+      "confidence": "Low",
+      "point_estimate": 401903,
+      "ape": 0.1482942857142857
     },
     {
       "actual": 618000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 740708,
-      "ape": 0.1985566343042071
+      "point_estimate": 735385,
+      "ape": 0.18994336569579287
     },
     {
       "actual": 320000,
@@ -1241,16 +1236,16 @@
     {
       "actual": 234950,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 335731,
-      "ape": 0.42894658437965527
+      "confidence": "Medium",
+      "point_estimate": 334429,
+      "ape": 0.4234049797829325
     },
     {
       "actual": 665000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 691176,
-      "ape": 0.03936240601503759
+      "confidence": "Medium",
+      "point_estimate": 688169,
+      "ape": 0.0348406015037594
     },
     {
       "actual": 500000,
@@ -1262,7 +1257,7 @@
     {
       "actual": 575000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 313862,
       "ape": 0.45415304347826085
     },
@@ -1270,20 +1265,20 @@
       "actual": 320000,
       "n_comps": 12,
       "confidence": "Medium",
-      "point_estimate": 247443,
-      "ape": 0.226740625
+      "point_estimate": 239388,
+      "ape": 0.2519125
     },
     {
       "actual": 464000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 616389,
-      "ape": 0.32842456896551725
+      "point_estimate": 578396,
+      "ape": 0.24654310344827587
     },
     {
       "actual": 280000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 276611,
       "ape": 0.012103571428571429
     },
@@ -1297,16 +1292,16 @@
     {
       "actual": 249000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 334467,
       "ape": 0.3432409638554217
     },
     {
       "actual": 531000,
       "n_comps": 12,
-      "confidence": "Low",
-      "point_estimate": 616627,
-      "ape": 0.16125612052730698
+      "confidence": "Medium",
+      "point_estimate": 448011,
+      "ape": 0.15628813559322033
     },
     {
       "actual": 472800,
@@ -1319,29 +1314,29 @@
       "actual": 710000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 778691,
-      "ape": 0.09674788732394367
+      "point_estimate": 763732,
+      "ape": 0.07567887323943662
     },
     {
       "actual": 580000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 733149,
-      "ape": 0.26405
+      "confidence": "Medium",
+      "point_estimate": 741428,
+      "ape": 0.2783241379310345
     },
     {
       "actual": 330000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 362734,
-      "ape": 0.09919393939393939
+      "confidence": "Medium",
+      "point_estimate": 354511,
+      "ape": 0.07427575757575758
     },
     {
       "actual": 174950,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 171355,
-      "ape": 0.020548728208059447
+      "confidence": "Low",
+      "point_estimate": 174583,
+      "ape": 0.002097742212060589
     },
     {
       "actual": 565000,
@@ -1374,30 +1369,30 @@
     {
       "actual": 558000,
       "n_comps": 20,
-      "confidence": "Low",
-      "point_estimate": 677826,
-      "ape": 0.21474193548387097
+      "confidence": "Medium",
+      "point_estimate": 845068,
+      "ape": 0.5144587813620072
     },
     {
       "actual": 966000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 1026509,
-      "ape": 0.06263871635610765
+      "confidence": "Low",
+      "point_estimate": 909279,
+      "ape": 0.058717391304347825
     },
     {
       "actual": 1297000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 1028388,
-      "ape": 0.20710254433307634
+      "confidence": "Medium",
+      "point_estimate": 982344,
+      "ape": 0.2426029298380879
     },
     {
       "actual": 310000,
       "n_comps": 19,
       "confidence": "Low",
-      "point_estimate": 324871,
-      "ape": 0.04797096774193548
+      "point_estimate": 322123,
+      "ape": 0.03910645161290323
     },
     {
       "actual": 535000,
@@ -1417,34 +1412,34 @@
       "actual": 1750000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 1417310,
-      "ape": 0.19010857142857143
+      "point_estimate": 1416801,
+      "ape": 0.19039942857142858
     },
     {
       "actual": 675000,
       "n_comps": 13,
-      "confidence": "High",
-      "point_estimate": 671777,
-      "ape": 0.004774814814814815
+      "confidence": "Low",
+      "point_estimate": 667106,
+      "ape": 0.011694814814814814
     },
     {
       "actual": 337000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 348445,
-      "ape": 0.03396142433234421
+      "confidence": "Medium",
+      "point_estimate": 351089,
+      "ape": 0.04180712166172107
     },
     {
       "actual": 410000,
       "n_comps": 14,
       "confidence": "Medium",
-      "point_estimate": 509012,
-      "ape": 0.24149268292682927
+      "point_estimate": 524094,
+      "ape": 0.2782780487804878
     },
     {
       "actual": 320000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 326820,
       "ape": 0.0213125
     },
@@ -1458,16 +1453,16 @@
     {
       "actual": 835000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 772378,
-      "ape": 0.07499640718562874
+      "confidence": "Medium",
+      "point_estimate": 779922,
+      "ape": 0.06596167664670659
     },
     {
       "actual": 863000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 950581,
-      "ape": 0.10148435689455389
+      "confidence": "Low",
+      "point_estimate": 742093,
+      "ape": 0.1401008111239861
     },
     {
       "actual": 320000,
@@ -1500,9 +1495,7 @@
     {
       "actual": 530000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 678504,
-      "ape": 0.28019622641509434
+      "confidence": "Low"
     },
     {
       "actual": 347000,
@@ -1515,15 +1508,15 @@
       "actual": 260000,
       "n_comps": 20,
       "confidence": "High",
-      "point_estimate": 262560,
-      "ape": 0.009846153846153846
+      "point_estimate": 264875,
+      "ape": 0.01875
     },
     {
       "actual": 585000,
       "n_comps": 20,
       "confidence": "High",
-      "point_estimate": 537242,
-      "ape": 0.08163760683760683
+      "point_estimate": 538048,
+      "ape": 0.08025982905982906
     },
     {
       "actual": 440000,
@@ -1535,23 +1528,21 @@
     {
       "actual": 305000,
       "n_comps": 7,
-      "confidence": "Low",
-      "point_estimate": 310641,
-      "ape": 0.018495081967213115
+      "confidence": "Low"
     },
     {
       "actual": 650500,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 650142,
-      "ape": 0.0005503458877786318
+      "point_estimate": 659991,
+      "ape": 0.014590315142198308
     },
     {
       "actual": 590000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 584776,
-      "ape": 0.008854237288135593
+      "point_estimate": 576350,
+      "ape": 0.023135593220338983
     },
     {
       "actual": 245000,
@@ -1564,8 +1555,8 @@
       "actual": 329999,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 477813,
-      "ape": 0.4479225694623317
+      "point_estimate": 458605,
+      "ape": 0.3897163324737348
     },
     {
       "actual": 470000,
@@ -1577,9 +1568,9 @@
     {
       "actual": 2885000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 2005144,
-      "ape": 0.3049760831889081
+      "confidence": "High",
+      "point_estimate": 2060189,
+      "ape": 0.2858963604852686
     },
     {
       "actual": 580000,
@@ -1591,9 +1582,7 @@
     {
       "actual": 745000,
       "n_comps": 13,
-      "confidence": "High",
-      "point_estimate": 516578,
-      "ape": 0.306606711409396
+      "confidence": "Low"
     },
     {
       "actual": 350000,
@@ -1605,16 +1594,16 @@
     {
       "actual": 515000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 528319,
       "ape": 0.025862135922330096
     },
     {
       "actual": 756100,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 682999,
-      "ape": 0.09668165586562624
+      "confidence": "Medium",
+      "point_estimate": 668228,
+      "ape": 0.1162174315566724
     },
     {
       "actual": 472500,
@@ -1627,13 +1616,13 @@
       "actual": 900000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 843483,
-      "ape": 0.06279666666666667
+      "point_estimate": 860646,
+      "ape": 0.043726666666666664
     },
     {
       "actual": 895000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 830520,
       "ape": 0.07204469273743017
     },
@@ -1647,14 +1636,14 @@
     {
       "actual": 380000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 335278,
-      "ape": 0.11768947368421052
+      "confidence": "Medium",
+      "point_estimate": 337196,
+      "ape": 0.11264210526315789
     },
     {
       "actual": 265000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 291093,
       "ape": 0.09846415094339622
     },
@@ -1668,51 +1657,51 @@
     {
       "actual": 194000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 170193,
-      "ape": 0.12271649484536082
+      "confidence": "Low",
+      "point_estimate": 176289,
+      "ape": 0.09129381443298969
     },
     {
       "actual": 300000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 308921,
-      "ape": 0.029736666666666668
+      "point_estimate": 300398,
+      "ape": 0.0013266666666666667
     },
     {
       "actual": 216650,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 344161,
-      "ape": 0.5885575813524118
+      "point_estimate": 354070,
+      "ape": 0.6342949457650588
     },
     {
       "actual": 223990,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 210633,
-      "ape": 0.05963212643421582
+      "confidence": "Low",
+      "point_estimate": 218644,
+      "ape": 0.023867136925755615
     },
     {
       "actual": 220000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 251379,
-      "ape": 0.1426318181818182
+      "point_estimate": 258769,
+      "ape": 0.17622272727272728
     },
     {
       "actual": 3600000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 1624746,
-      "ape": 0.5486816666666666
+      "point_estimate": 1563276,
+      "ape": 0.5657566666666667
     },
     {
       "actual": 310000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 346817,
-      "ape": 0.11876451612903226
+      "point_estimate": 351748,
+      "ape": 0.1346709677419355
     },
     {
       "actual": 360000,
@@ -1725,22 +1714,22 @@
       "actual": 635000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 573448,
-      "ape": 0.09693228346456693
+      "point_estimate": 576283,
+      "ape": 0.09246771653543306
     },
     {
       "actual": 599950,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 676113,
-      "ape": 0.12694891240936745
+      "confidence": "Medium",
+      "point_estimate": 678323,
+      "ape": 0.13063255271272606
     },
     {
       "actual": 220000,
       "n_comps": 19,
-      "confidence": "High",
-      "point_estimate": 280819,
-      "ape": 0.27645
+      "confidence": "Low",
+      "point_estimate": 292242,
+      "ape": 0.32837272727272726
     },
     {
       "actual": 372000,
@@ -1752,16 +1741,16 @@
     {
       "actual": 332900,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 338889,
-      "ape": 0.01799038750375488
+      "confidence": "Medium",
+      "point_estimate": 340327,
+      "ape": 0.022310003003905076
     },
     {
       "actual": 380000,
       "n_comps": 20,
       "confidence": "High",
-      "point_estimate": 362339,
-      "ape": 0.046476315789473685
+      "point_estimate": 360922,
+      "ape": 0.05020526315789474
     },
     {
       "actual": 471000,
@@ -1780,16 +1769,16 @@
     {
       "actual": 684000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 691771,
-      "ape": 0.011361111111111112
+      "confidence": "Medium",
+      "point_estimate": 703780,
+      "ape": 0.02891812865497076
     },
     {
       "actual": 750000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 765090,
-      "ape": 0.02012
+      "point_estimate": 776415,
+      "ape": 0.03522
     },
     {
       "actual": 612125,
@@ -1802,29 +1791,29 @@
       "actual": 455500,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 367181,
-      "ape": 0.1938946212952799
+      "point_estimate": 358985,
+      "ape": 0.2118880351262349
     },
     {
       "actual": 330000,
       "n_comps": 14,
       "confidence": "Medium",
-      "point_estimate": 333739,
-      "ape": 0.01133030303030303
+      "point_estimate": 319622,
+      "ape": 0.03144848484848485
     },
     {
       "actual": 654000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 527007,
-      "ape": 0.1941788990825688
+      "point_estimate": 519333,
+      "ape": 0.20591284403669724
     },
     {
       "actual": 323000,
       "n_comps": 14,
       "confidence": "Medium",
-      "point_estimate": 396612,
-      "ape": 0.22790092879256965
+      "point_estimate": 391015,
+      "ape": 0.21057275541795667
     },
     {
       "actual": 315000,
@@ -1836,37 +1825,35 @@
     {
       "actual": 392000,
       "n_comps": 19,
-      "confidence": "High",
-      "point_estimate": 351471,
-      "ape": 0.10339030612244898
+      "confidence": "Medium",
+      "point_estimate": 348204,
+      "ape": 0.11172448979591837
     },
     {
       "actual": 782000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 971514,
-      "ape": 0.24234526854219948
+      "point_estimate": 980708,
+      "ape": 0.2541023017902813
     },
     {
       "actual": 298500,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 251706,
       "ape": 0.15676381909547737
     },
     {
       "actual": 3650000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 2738446,
-      "ape": 0.24974082191780822
+      "confidence": "Low"
     },
     {
       "actual": 374000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 414863,
-      "ape": 0.10925935828877005
+      "confidence": "Medium",
+      "point_estimate": 417262,
+      "ape": 0.11567379679144385
     },
     {
       "actual": 850000,
@@ -1878,9 +1865,9 @@
     {
       "actual": 785000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 935574,
-      "ape": 0.1918140127388535
+      "confidence": "Medium",
+      "point_estimate": 901951,
+      "ape": 0.14898216560509553
     },
     {
       "actual": 615000,
@@ -1892,35 +1879,35 @@
     {
       "actual": 599832,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 701046,
-      "ape": 0.16873724642900012
+      "confidence": "Medium",
+      "point_estimate": 669731,
+      "ape": 0.11653096200269408
     },
     {
       "actual": 1075000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 819327,
-      "ape": 0.2378353488372093
+      "point_estimate": 837709,
+      "ape": 0.22073581395348837
     },
     {
       "actual": 226000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 306130,
-      "ape": 0.3545575221238938
+      "confidence": "Medium",
+      "point_estimate": 302704,
+      "ape": 0.33939823008849557
     },
     {
       "actual": 421500,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 475341,
-      "ape": 0.12773665480427046
+      "confidence": "Low",
+      "point_estimate": 444627,
+      "ape": 0.05486832740213523
     },
     {
       "actual": 406550,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 493664,
       "ape": 0.21427622678637315
     },
@@ -1928,13 +1915,13 @@
       "actual": 360000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 448057,
-      "ape": 0.24460277777777778
+      "point_estimate": 455958,
+      "ape": 0.26655
     },
     {
       "actual": 520000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 418324,
       "ape": 0.19553076923076923
     },
@@ -1946,9 +1933,9 @@
     {
       "actual": 550000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 549455,
-      "ape": 0.000990909090909091
+      "confidence": "Low",
+      "point_estimate": 548482,
+      "ape": 0.00276
     },
     {
       "actual": 425000,
@@ -1960,9 +1947,9 @@
     {
       "actual": 1610000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 1328343,
-      "ape": 0.1749422360248447
+      "confidence": "Medium",
+      "point_estimate": 1347079,
+      "ape": 0.16330496894409938
     },
     {
       "actual": 185000,
@@ -1975,29 +1962,29 @@
       "actual": 345000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 314165,
-      "ape": 0.0893768115942029
+      "point_estimate": 314162,
+      "ape": 0.08938550724637681
     },
     {
       "actual": 585000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 607825,
-      "ape": 0.039017094017094016
+      "point_estimate": 600622,
+      "ape": 0.026704273504273505
     },
     {
       "actual": 325000,
       "n_comps": 11,
-      "confidence": "High",
-      "point_estimate": 396267,
-      "ape": 0.21928307692307691
+      "confidence": "Medium",
+      "point_estimate": 376863,
+      "ape": 0.15957846153846153
     },
     {
       "actual": 220000,
       "n_comps": 20,
       "confidence": "High",
-      "point_estimate": 238186,
-      "ape": 0.08266363636363637
+      "point_estimate": 238692,
+      "ape": 0.08496363636363637
     },
     {
       "actual": 716100,
@@ -2016,7 +2003,7 @@
     {
       "actual": 450000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 462927,
       "ape": 0.028726666666666668
     },
@@ -2030,14 +2017,14 @@
     {
       "actual": 572000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 585326,
-      "ape": 0.023297202797202796
+      "confidence": "Low",
+      "point_estimate": 601812,
+      "ape": 0.05211888111888112
     },
     {
       "actual": 343888,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 310638,
       "ape": 0.09668845670683478
     },
@@ -2045,8 +2032,8 @@
       "actual": 474950,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 502099,
-      "ape": 0.057161806505947994
+      "point_estimate": 514181,
+      "ape": 0.08260027371302242
     },
     {
       "actual": 410000,
@@ -2058,16 +2045,16 @@
     {
       "actual": 295000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 275731,
-      "ape": 0.06531864406779661
+      "confidence": "Low",
+      "point_estimate": 283584,
+      "ape": 0.03869830508474576
     },
     {
       "actual": 635000,
       "n_comps": 12,
-      "confidence": "Low",
-      "point_estimate": 624336,
-      "ape": 0.016793700787401576
+      "confidence": "Medium",
+      "point_estimate": 569710,
+      "ape": 0.10281889763779528
     },
     {
       "actual": 275000,
@@ -2080,29 +2067,27 @@
       "actual": 185000,
       "n_comps": 13,
       "confidence": "Low",
-      "point_estimate": 177649,
-      "ape": 0.03973513513513514
+      "point_estimate": 178295,
+      "ape": 0.036243243243243246
     },
     {
       "actual": 239000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 195362,
-      "ape": 0.1825857740585774
+      "point_estimate": 211679,
+      "ape": 0.11431380753138075
     },
     {
       "actual": 840000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 795893,
-      "ape": 0.05250833333333333
+      "confidence": "Medium",
+      "point_estimate": 776189,
+      "ape": 0.0759654761904762
     },
     {
       "actual": 644000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 802169,
-      "ape": 0.24560403726708074
+      "confidence": "Low"
     },
     {
       "actual": 515000,
@@ -2115,27 +2100,27 @@
       "actual": 276200,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 285555,
-      "ape": 0.03387038377986966
+      "point_estimate": 283336,
+      "ape": 0.025836350470673425
     },
     {
       "actual": 400000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 495167,
-      "ape": 0.2379175
+      "confidence": "Medium",
+      "point_estimate": 506082,
+      "ape": 0.265205
     },
     {
       "actual": 769900,
       "n_comps": 11,
       "confidence": "Low",
-      "point_estimate": 687212,
-      "ape": 0.1074009611637875
+      "point_estimate": 792146,
+      "ape": 0.0288946616443694
     },
     {
       "actual": 585000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 603345,
       "ape": 0.03135897435897436
     },
@@ -2157,29 +2142,29 @@
       "actual": 587100,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 654210,
-      "ape": 0.11430761369443025
+      "point_estimate": 641335,
+      "ape": 0.09237778913302674
     },
     {
       "actual": 329900,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 347979,
-      "ape": 0.0548014549863595
+      "point_estimate": 345061,
+      "ape": 0.04595635040921491
     },
     {
       "actual": 725000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 691852,
-      "ape": 0.045721379310344826
+      "point_estimate": 698511,
+      "ape": 0.03653655172413793
     },
     {
       "actual": 445000,
       "n_comps": 11,
-      "confidence": "High",
-      "point_estimate": 423319,
-      "ape": 0.04872134831460674
+      "confidence": "Medium",
+      "point_estimate": 423972,
+      "ape": 0.047253932584269666
     },
     {
       "actual": 380000,
@@ -2206,8 +2191,8 @@
       "actual": 285000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 240434,
-      "ape": 0.1563719298245614
+      "point_estimate": 248631,
+      "ape": 0.12761052631578948
     },
     {
       "actual": 1050000,
@@ -2219,30 +2204,28 @@
     {
       "actual": 749400,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 869150,
-      "ape": 0.15979450226848146
+      "confidence": "Medium",
+      "point_estimate": 850037,
+      "ape": 0.1342900987456632
     },
     {
       "actual": 1490000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 1238281,
-      "ape": 0.16893892617449666
+      "point_estimate": 1219032,
+      "ape": 0.18185771812080537
     },
     {
       "actual": 950000,
       "n_comps": 13,
-      "confidence": "Medium",
-      "point_estimate": 1072346,
-      "ape": 0.12878526315789474
+      "confidence": "Low"
     },
     {
       "actual": 264500,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 257861,
-      "ape": 0.025100189035916824
+      "confidence": "Medium",
+      "point_estimate": 257737,
+      "ape": 0.02556899810964083
     },
     {
       "actual": 1385000,
@@ -2255,22 +2238,22 @@
       "actual": 199950,
       "n_comps": 17,
       "confidence": "Low",
-      "point_estimate": 258109,
-      "ape": 0.2908677169292323
+      "point_estimate": 257458,
+      "ape": 0.28761190297574396
     },
     {
       "actual": 969950,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 1010773,
-      "ape": 0.04208773648126192
+      "confidence": "Medium",
+      "point_estimate": 1001053,
+      "ape": 0.0320666013712047
     },
     {
       "actual": 405000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 366799,
-      "ape": 0.09432345679012345
+      "confidence": "Medium",
+      "point_estimate": 377093,
+      "ape": 0.06890617283950617
     },
     {
       "actual": 322500,
@@ -2290,8 +2273,8 @@
       "actual": 275000,
       "n_comps": 12,
       "confidence": "Low",
-      "point_estimate": 248613,
-      "ape": 0.09595272727272727
+      "point_estimate": 253270,
+      "ape": 0.07901818181818182
     },
     {
       "actual": 181000,
@@ -2310,7 +2293,7 @@
     {
       "actual": 376950,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 362861,
       "ape": 0.03737630985541849
     },
@@ -2318,15 +2301,15 @@
       "actual": 476000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 750026,
-      "ape": 0.5756848739495798
+      "point_estimate": 730762,
+      "ape": 0.5352142857142858
     },
     {
       "actual": 480000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 398414,
-      "ape": 0.16997083333333332
+      "point_estimate": 396807,
+      "ape": 0.17331875
     },
     {
       "actual": 229000,
@@ -2359,16 +2342,16 @@
     {
       "actual": 280000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 315823,
-      "ape": 0.12793928571428573
+      "confidence": "Medium",
+      "point_estimate": 314006,
+      "ape": 0.12145
     },
     {
       "actual": 315000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 244429,
-      "ape": 0.22403492063492064
+      "confidence": "Medium",
+      "point_estimate": 246801,
+      "ape": 0.2165047619047619
     },
     {
       "actual": 499950,
@@ -2388,50 +2371,46 @@
       "actual": 700000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 677495,
-      "ape": 0.03215
+      "point_estimate": 681005,
+      "ape": 0.027135714285714287
     },
     {
       "actual": 347500,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 312317,
       "ape": 0.10124604316546762
     },
     {
       "actual": 600000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 948003,
-      "ape": 0.580005
+      "confidence": "Low"
     },
     {
       "actual": 286000,
       "n_comps": 5,
       "confidence": "Low",
-      "point_estimate": 206494,
-      "ape": 0.277993006993007
+      "point_estimate": 218122,
+      "ape": 0.23733566433566433
     },
     {
       "actual": 1212500,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 1382107,
-      "ape": 0.1398820618556701
+      "confidence": "Low"
     },
     {
       "actual": 580000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 641821,
-      "ape": 0.10658793103448276
+      "point_estimate": 649254,
+      "ape": 0.11940344827586206
     },
     {
       "actual": 630000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 536779,
-      "ape": 0.14796984126984128
+      "point_estimate": 545551,
+      "ape": 0.13404603174603175
     },
     {
       "actual": 730000,
@@ -2444,13 +2423,13 @@
       "actual": 1300000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 859656,
-      "ape": 0.33872615384615384
+      "point_estimate": 854243,
+      "ape": 0.34289
     },
     {
       "actual": 850000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 787752,
       "ape": 0.07323294117647058
     },
@@ -2471,7 +2450,7 @@
     {
       "actual": 596500,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 506563,
       "ape": 0.15077451802179379
     },
@@ -2486,27 +2465,27 @@
       "actual": 180250,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 203667,
-      "ape": 0.1299140083217753
+      "point_estimate": 201706,
+      "ape": 0.11903467406380028
     },
     {
       "actual": 528000,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 456256,
-      "ape": 0.13587878787878788
+      "point_estimate": 461327,
+      "ape": 0.1262746212121212
     },
     {
       "actual": 405500,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 451888,
-      "ape": 0.11439704069050555
+      "point_estimate": 457391,
+      "ape": 0.1279679408138101
     },
     {
       "actual": 1850000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 1144315,
       "ape": 0.38145135135135133
     },
@@ -2520,9 +2499,7 @@
     {
       "actual": 789000,
       "n_comps": 12,
-      "confidence": "Low",
-      "point_estimate": 961121,
-      "ape": 0.2181508238276299
+      "confidence": "Low"
     },
     {
       "actual": 527950,
@@ -2534,23 +2511,21 @@
     {
       "actual": 688000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 834752,
-      "ape": 0.21330232558139534
+      "confidence": "Medium",
+      "point_estimate": 795639,
+      "ape": 0.15645203488372092
     },
     {
       "actual": 1057000,
       "n_comps": 15,
-      "confidence": "High",
-      "point_estimate": 640487,
-      "ape": 0.3940520340586566
+      "confidence": "Low"
     },
     {
       "actual": 999999,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 915816,
-      "ape": 0.08418308418308418
+      "point_estimate": 880430,
+      "ape": 0.11956911956911957
     },
     {
       "actual": 355000,
@@ -2563,15 +2538,15 @@
       "actual": 1197350,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 1077920,
-      "ape": 0.09974527080636406
+      "point_estimate": 1064090,
+      "ape": 0.11129577817680712
     },
     {
       "actual": 254600,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 286894,
-      "ape": 0.1268421052631579
+      "point_estimate": 282180,
+      "ape": 0.10832678711704635
     },
     {
       "actual": 630000,
@@ -2591,13 +2566,13 @@
       "actual": 319950,
       "n_comps": 20,
       "confidence": "Low",
-      "point_estimate": 275968,
-      "ape": 0.13746522894202218
+      "point_estimate": 272459,
+      "ape": 0.14843256758868573
     },
     {
       "actual": 550000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 679850,
       "ape": 0.2360909090909091
     },
@@ -2605,20 +2580,18 @@
       "actual": 250000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 385530,
-      "ape": 0.54212
+      "point_estimate": 380732,
+      "ape": 0.522928
     },
     {
       "actual": 1135000,
       "n_comps": 20,
-      "confidence": "Medium",
-      "point_estimate": 1112402,
-      "ape": 0.019910132158590308
+      "confidence": "Low"
     },
     {
       "actual": 324950,
       "n_comps": 20,
-      "confidence": "Medium",
+      "confidence": "Low",
       "point_estimate": 297766,
       "ape": 0.08365594706877981
     },
@@ -2632,16 +2605,16 @@
     {
       "actual": 531500,
       "n_comps": 11,
-      "confidence": "Medium",
-      "point_estimate": 428594,
-      "ape": 0.1936142991533396
+      "confidence": "Low",
+      "point_estimate": 419472,
+      "ape": 0.21077704609595485
     },
     {
       "actual": 610000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 571957,
-      "ape": 0.0623655737704918
+      "confidence": "Medium",
+      "point_estimate": 552872,
+      "ape": 0.09365245901639345
     },
     {
       "actual": 443000,
@@ -2681,9 +2654,9 @@
     {
       "actual": 239900,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 221764,
-      "ape": 0.07559816590245935
+      "confidence": "Medium",
+      "point_estimate": 223628,
+      "ape": 0.06782826177573989
     },
     {
       "actual": 555000,
@@ -2695,7 +2668,7 @@
     {
       "actual": 435000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 414796,
       "ape": 0.046445977011494256
     },
@@ -2710,8 +2683,8 @@
       "actual": 450000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 825053,
-      "ape": 0.8334511111111111
+      "point_estimate": 804678,
+      "ape": 0.7881733333333333
     },
     {
       "actual": 502000,
@@ -2752,8 +2725,8 @@
       "actual": 490000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 524982,
-      "ape": 0.07139183673469388
+      "point_estimate": 530034,
+      "ape": 0.08170204081632652
     },
     {
       "actual": 499950,
@@ -2766,20 +2739,20 @@
       "actual": 515000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 538520,
-      "ape": 0.04566990291262136
+      "point_estimate": 534491,
+      "ape": 0.03784660194174757
     },
     {
       "actual": 280000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 314752,
-      "ape": 0.12411428571428572
+      "point_estimate": 320950,
+      "ape": 0.14625
     },
     {
       "actual": 618000,
       "n_comps": 20,
-      "confidence": "High",
+      "confidence": "Medium",
       "point_estimate": 551123,
       "ape": 0.10821521035598705
     },
@@ -2787,15 +2760,15 @@
       "actual": 405000,
       "n_comps": 20,
       "confidence": "Medium",
-      "point_estimate": 471570,
-      "ape": 0.16437037037037036
+      "point_estimate": 480950,
+      "ape": 0.18753086419753087
     },
     {
       "actual": 551000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 594500,
-      "ape": 0.07894736842105263
+      "confidence": "Medium",
+      "point_estimate": 591477,
+      "ape": 0.07346098003629764
     },
     {
       "actual": 241450,
@@ -2814,9 +2787,9 @@
     {
       "actual": 1650000,
       "n_comps": 20,
-      "confidence": "High",
-      "point_estimate": 987601,
-      "ape": 0.4014539393939394
+      "confidence": "Low",
+      "point_estimate": 925555,
+      "ape": 0.43905757575757576
     },
     {
       "actual": 720000,

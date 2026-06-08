@@ -10,11 +10,20 @@ the P2 backtest. Secrets and deployment-specific values come from the environmen
 from __future__ import annotations
 
 import os
+from datetime import date
 from pathlib import Path
 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# --------------------------------------------------------------------------------------
+# Data window — the bundled King County store spans 2014-05..2015-05. Any path that builds
+# a Subject without an explicit as-of date (the extraction path) must default INSIDE this
+# window, or the recency tiers match nothing and every valuation comes back empty. The
+# frontend form uses the same 2015-05-01 default; all input paths share this one value.
+# --------------------------------------------------------------------------------------
+DEFAULT_AS_OF_DATE: date = date(2015, 5, 1)
 
 # --------------------------------------------------------------------------------------
 # Paths & determinism (absolute + CWD-independent; single source of truth for the parquet)
@@ -54,11 +63,13 @@ CF_COMP_COUNT = "comp_count"
 CF_MEAN_DISTANCE_KM = "mean_distance_km"
 CF_DISPERSION = "dispersion"
 CF_MEDIAN_AGE_DAYS = "median_age_days"
+CF_MEAN_ADJUSTMENT = "mean_adjustment"  # mean |adjusted - sale| / sale over INCLUDED comps
 
 CT_MIN_COMPS = "min_comps"
 CT_MAX_MEAN_DISTANCE_KM = "max_mean_distance_km"
 CT_MAX_DISPERSION = "max_dispersion"
 CT_MAX_MEDIAN_AGE_DAYS = "max_median_age_days"
+CT_MAX_MEAN_ADJUSTMENT = "max_mean_adjustment"
 
 # Internal unit convention: recency/age are handled in DAYS throughout the core; only the
 # conservative staleness term converts DAYS → YEARS (at that edge) using DAYS_PER_YEAR.
@@ -136,7 +147,18 @@ CONSERVATIVE_BASE_MARGIN: float = 0.02
 CONSERVATIVE_DISPERSION_COEF: float = 0.50  # × coefficient-of-variation of adjusted prices
 CONSERVATIVE_DISTANCE_COEF: float = 0.01  # × mean comp distance (km)
 CONSERVATIVE_STALENESS_COEF: float = 0.02  # × mean comp age in YEARS (days / DAYS_PER_YEAR at edge)
-CONSERVATIVE_MARGIN_CAP: float = 0.15  # never discount the point estimate by more than 15%
+# × mean adjustment fraction over the included comps: a set stretched to fit (large average
+# hedonic adjustment) is less trustworthy, so the defensible value drops further below the point.
+CONSERVATIVE_ADJUSTMENT_COEF: float = 0.50
+CONSERVATIVE_MARGIN_CAP: float = 0.25  # never discount the point estimate by more than 25%
+
+# --------------------------------------------------------------------------------------
+# Comp-quality gate (P5 review) — exclude indefensible comps from the estimate. Excluded comps
+# stay visible in the table with a status, but never drive the point/range/conservative figures.
+# --------------------------------------------------------------------------------------
+MAX_ADJUSTMENT_FRACTION: float = 0.30  # exclude if |adjusted - sale| / sale exceeds this
+MIN_SIMILARITY_FOR_ESTIMATE: float = 0.45  # exclude comps scoring below this similarity
+MIN_COMPS_FOR_ESTIMATE: int = 3  # fewer included than this → "insufficient comparable sales"
 
 # --------------------------------------------------------------------------------------
 # Confidence thresholds (§6) — High if every High bound is met; else Medium if every Medium
@@ -148,11 +170,13 @@ CONFIDENCE_THRESHOLDS: dict[str, dict[str, float]] = {
         CT_MAX_MEAN_DISTANCE_KM: 3.0,
         CT_MAX_DISPERSION: 0.12,
         CT_MAX_MEDIAN_AGE_DAYS: 180,
+        CT_MAX_MEAN_ADJUSTMENT: 0.10,  # a heavily-adjusted comp set cannot be High confidence
     },
     "Medium": {
         CT_MIN_COMPS: 5,
         CT_MAX_MEAN_DISTANCE_KM: 6.0,
         CT_MAX_DISPERSION: 0.20,
         CT_MAX_MEDIAN_AGE_DAYS: 365,
+        CT_MAX_MEAN_ADJUSTMENT: 0.18,  # above this the set is stretched to fit → Low
     },
 }

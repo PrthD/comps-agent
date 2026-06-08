@@ -43,6 +43,6 @@ def flag_outliers(scored: list[ScoredComp]) -> list[ScoredComp]:
             sc.flagged = True
             sc.flag_reason = (
                 f"$/sqft of ${pps:,.0f} is {ratio:.1f}x the neighborhood median of "
-                f"${median:,.0f} — outside the robust band [${low:,.0f}, ${high:,.0f}]"
+                f"${median:,.0f}, outside the robust band [${low:,.0f}, ${high:,.0f}]"
             )
     return scored

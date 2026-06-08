@@ -31,7 +31,19 @@ class PropertyFeatures(BaseModel):
 
 
 class Subject(PropertyFeatures):
-    """The property being valued, from a document/form (via the LLM) or entered directly."""
+    """The property being valued, from a document/form (via the LLM) or entered directly.
+
+    The value-critical fields below are REQUIRED to produce a valuation, but are optional *on the
+    wire* so "not provided" is representable as ``None`` — the gate then catches absence
+    cleanly instead of relying on a 0.0/1 sentinel. (``Comp`` keeps them required: a real sale is
+    always fully specified.) ``None`` is the canonical "not provided".
+    """
+
+    sqft_living: int | None = Field(default=None, gt=0)
+    beds: float | None = None
+    baths: float | None = None
+    lat: float | None = Field(default=None, ge=-90, le=90)
+    lng: float | None = Field(default=None, ge=-180, le=180)
 
     as_of_date: date = Field(default_factory=date.today)  # backtest = the held-out sale date
     # Extraction metadata — set by the agent's extract step; None for hand-entered subjects:
@@ -45,22 +57,24 @@ REQUIRED_FIELDS: tuple[str, ...] = ("sqft_living", "beds", "baths", "lat", "lng"
 
 
 def required_fields_missing(subject: Subject) -> list[str]:
-    """Single source of truth for the gate: which required fields are absent or sentinel.
+    """Single source of truth for the gate: which required-to-value fields are not provided.
 
-    Detects the placeholders the extract path emits when it cannot read a field (it never fabricates
-    a value — it flags one): ``sqft_living == 1``, ``lat == lng == 0.0`` (the coordinate
-    placeholder), and ``beds``/``baths == 0.0``. Anything still in ``subject.needs_review`` that the
-    math needs also counts. Returned sorted + de-duplicated; empty list means "ready to value".
+    ``None`` is the canonical "not provided" (the wire sends null for empty fields, and the extract
+    path emits null for anything it could not read — it never fabricates a value). ``needs_review``
+    membership is the primary secondary signal; the old numeric sentinels (``sqft_living <= 1``,
+    ``beds``/``baths == 0``) are kept only as a backstop for a direct API caller that still posts a
+    placeholder. Returned sorted + de-duplicated; an empty list means "ready to value".
     """
     missing: set[str] = set()
-    if subject.sqft_living <= 1:  # 1 is the extractor's placeholder; no real home is ≤1 sqft
+    if subject.sqft_living is None or subject.sqft_living <= 1:  # None canonical; ≤1 = backstop
         missing.add("sqft_living")
-    if not subject.beds:  # 0.0 placeholder (or genuinely 0 → still not valuable for the math)
+    if not subject.beds:  # None or 0.0 (genuinely 0 beds is still not valuable for the math)
         missing.add("beds")
     if not subject.baths:
         missing.add("baths")
-    if subject.lat == 0.0 and subject.lng == 0.0:  # the coordinate placeholder (never invented)
+    if subject.lat is None:  # coordinates: absence is None, never a 0.0 sentinel
         missing.add("lat")
+    if subject.lng is None:
         missing.add("lng")
     for field in subject.needs_review or []:
         if field in REQUIRED_FIELDS:
@@ -85,8 +99,23 @@ class ScoredComp(BaseModel):
     subscores: dict[str, float]  # distance, recency, area, bed_bath, age, grade — each 0–1
     adjustments: dict[str, float]  # line-item $ deltas applied to sale_price
     adjusted_price: int
-    flagged: bool = False
+    flagged: bool = False  # True if excluded from the estimate (any non-"included" status)
     flag_reason: str | None = None
+    # Why a comp was (or was not) used: included, or excluded as a $/sqft outlier, for low
+    # similarity, or because its hedonic adjustment was too large to be comparable.
+    status: Literal["included", "outlier", "low_similarity", "large_adjustment"] = "included"
+
+
+class Rationale(BaseModel):
+    """The async second phase of a valuation: the prose rationale and how it was produced.
+
+    ``/api/value`` returns the numbers immediately (``mode="deterministic"``); the UI then fetches
+    this from ``/api/rationale`` and drops the prose into the rationale panel. ``mode`` is "agent"
+    when the LLM wrote it, or "deterministic" when the template was used (no key / empty / failure).
+    """
+
+    rationale: str
+    mode: Literal["agent", "deterministic"]
 
 
 class Valuation(BaseModel):
