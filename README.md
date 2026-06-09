@@ -9,7 +9,7 @@ comp table, and a plain-English rationale. It is built for an underwriter who ne
 can stand behind, not a black-box estimate.
 
 - Live demo: [LIVE_URL](https://comps-agent.vercel.app/)
-- Demo video: INSERT_LOOM_URL
+- Demo video: [LOOM_URL](https://www.loom.com/share/2040c600bf3e4e93937461ab204c964b)
 
 ---
 
