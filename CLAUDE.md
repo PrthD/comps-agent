@@ -11,7 +11,7 @@ Comps valuation agent for the KV Capital AI Engineer hackathon.
   under `backend/app/core/`.
 - **≤2 LLM calls per valuation** (extraction + reasoning) plus at most 1 bounded re-query. Speed is
   the customer's #1 pain; the deterministic core does retrieval/scoring/adjustment without round-trips.
-- **Leakage rule.** When valuing a subject, only use comps sold *strictly before* its as-of date, and
+- **Leakage rule.** When valuing a subject, only use comps sold _strictly before_ its as-of date, and
   never the subject itself. Enforced in retrieval and asserted in tests.
 - **Headline output is the conservative defensible value** + range + confidence — not the point
   estimate. This is a lender, not a brokerage.
