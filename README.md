@@ -1,6 +1,9 @@
 <div align="center">
 
-# Comps Valuation Agent
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/hero-dark.svg" />
+  <img src="docs/hero-light.svg" width="880" alt="Comps Valuation Agent, a lender underwriting tool. A price-per-sqft band holds the comparable sales, two flagged comps sit outside it marked excluded, and on the value scale below, the defensible value sits to the left of the P25 to P75 range and the point estimate." />
+</picture>
 
 **A property value an underwriter can defend, in the time it takes to read one comp.**
 Turn a messy property document into a conservative comparable-sales valuation,<br />
@@ -9,6 +12,7 @@ with the flagged outliers, the comp table and the reasoning needed to sign off o
 [![CI](https://github.com/PrthD/comps-agent/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PrthD/comps-agent/actions/workflows/ci.yml)
 [![Backtest MdAPE](https://img.shields.io/badge/backtest_MdAPE-9.8%25-2ea44f)](docs/eval_report.md)
 [![Deterministic core](https://img.shields.io/badge/numbers-100%25_deterministic-0b5fff)](#architecture)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [![Python](https://img.shields.io/badge/Python_3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -49,6 +53,7 @@ with the flagged outliers, the comp table and the reasoning needed to sign off o
 - [Scope and tradeoffs](#scope-and-tradeoffs)
 - [What's next](#whats-next)
 - [Data and credits](#data-and-credits)
+- [License](#license)
 
 ## About
 
@@ -462,3 +467,7 @@ Deliberate cuts, each with a reason:
   bundled as a parquet file; `make data` rebuilds it from source.
 - **Maps**: [Leaflet](https://leafletjs.com) with [OpenStreetMap](https://www.openstreetmap.org/copyright)
   tiles, no API key required.
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
